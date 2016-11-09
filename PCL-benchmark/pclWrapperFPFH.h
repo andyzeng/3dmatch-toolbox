@@ -8,6 +8,71 @@
 typedef pcl::FPFHSignature33 FPFHDescriptor;
 typedef pcl::PFHSignature125 PFHDescriptor;
 
+class PCLUtil {
+	static vector<float> makeFPFHDescriptor(const PointCloudf &mlibCloud, const vec3f &queryPt)
+	{
+		const float PCANormalRadius = 20.0f;
+		const float FPFHSearchRadius = 100.0f;
+
+		pcl::PointCloud<FPFHDescriptor>::Ptr descriptors(new pcl::PointCloud<FPFHDescriptor>());
+
+		pcl::PointCloud<pcl::PointXYZ>::Ptr pclCloud(new pcl::PointCloud<pcl::PointXYZ>);
+		pcl::PointCloud<pcl::Normal>::Ptr pclNormals(new pcl::PointCloud<pcl::Normal>);
+
+		//
+		// create PCL cloud
+		//
+		for (auto &p : mlibCloud.m_points)
+		{
+			pcl::PointXYZ pPCL;
+			pPCL.x = p.x;
+			pPCL.y = p.y;
+			pPCL.z = p.z;
+			pclCloud->push_back(pPCL);
+		}
+
+		//
+		// compute normals
+		//
+		pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normEstimator;
+		pcl::search::KdTree<pcl::PointXYZ>::Ptr searchMethod(new pcl::search::KdTree<pcl::PointXYZ>);
+		normEstimator.setInputCloud(pclCloud);
+		normEstimator.setSearchMethod(searchMethod);
+		normEstimator.setRadiusSearch(PCANormalRadius);
+		normEstimator.compute(*pclNormals);
+
+		//
+		// Find point closest to query
+		//
+		pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree(new pcl::search::KdTree<pcl::PointXYZ>);
+		kdtree->setInputCloud(pclCloud);
+		pcl::PointXYZ pclQueryPoint(queryPt.x, queryPt.y, queryPt.z);
+		std::vector<int> pointIdxNKNSearch(1);
+		std::vector<float> pointNKNSquaredDistance(1);
+		int n = kdtree->nearestKSearch(pclQueryPoint, 1, pointIdxNKNSearch, pointNKNSquaredDistance);
+		assert(n);
+
+		//
+		// compute FPFH
+		//
+		pcl::FPFHEstimation<pcl::PointXYZ, pcl::Normal, pcl::FPFHSignature33> fpfh;
+		fpfh.setInputCloud(pclCloud);
+		fpfh.setInputNormals(pclNormals);
+		fpfh.setSearchMethod(kdtree);
+		// Search radius, to look for neighbors. Note: the value given here has to be
+		// larger than the radius used to estimate the normals.
+		fpfh.setRadiusSearch(FPFHSearchRadius);
+
+		fpfh.compute(*descriptors);
+
+		const FPFHDescriptor &desc = (*descriptors)[pointIdxNKNSearch[0]];
+		vector<float> result;
+		for (auto &f : desc.histogram)
+			result.push_back(f);
+		return result;
+	}
+};
+
 class PCLWrapperFPFH {
 public:
 	const float voxelSize = 0.01f;
