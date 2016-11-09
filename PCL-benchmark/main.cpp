@@ -1,11 +1,11 @@
 
 #include "main.h"
 
-KeypointParameters *g_keypointParams;
+BenchmarkParams *g_benchmarkParams;
 
 void main()
 {
-	g_keypointParams = new KeypointParameters();
+	g_benchmarkParams = new BenchmarkParams();
 
 	App app;
 	app.go();

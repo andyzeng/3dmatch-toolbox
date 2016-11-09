@@ -13,11 +13,15 @@
   <ItemGroup>
     <ClCompile Include="app.cpp" />
     <ClCompile Include="benchmarkUtil.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="mLibSource.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
+    <ClInclude Include="benchmarkParams.h" />
     <ClInclude Include="benchmarkUtil.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mLibInclude.h" />

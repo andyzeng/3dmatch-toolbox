@@ -1,1 +1,6 @@
 /dataset
+/PCL-benchmark/x64
+/PCL-benchmark/ipch
+/PCL-benchmark/.vs/benchmark/v14/*.suo
+/PCL-benchmark/*.opendb
+/PCL-benchmark/*.db

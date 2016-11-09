@@ -4,30 +4,19 @@
 //#define USE_MATLAB
 
 #include "mLibInclude.h"
-#include "virtualDirectory.h"
 
-#include "enums.h"
-#include "speechParams.h"
-#include "speechUtil.h"
-#include "soundFile.h"
-#include "soundDatabase.h"
-#include "speechAccelerator.h"
-#include "speechAcceleratorEnsemble.h"
-
-#include "waveformFragments.h"
-#include "waveformSolver.h"
-#include "dynamicTimeWarping.h"
-#include "featureEvaluator.h"
+#include "benchmarkParams.h"
+#include "benchmarkUtil.h"
 
 #include "app.h"
 
-extern SpeechParameters* g_speechParams;
-inline const SpeechParameters& speechParams()
+extern BenchmarkParams* g_benchmarkParams;
+inline const BenchmarkParams& benchmarkParams()
 {
-	return *g_speechParams;
+	return *g_benchmarkParams;
 }
 
-inline SpeechParameters& speechParamsMutable()
+inline BenchmarkParams& benchmarkParamsMutable()
 {
-	return *g_speechParams;
+	return *g_benchmarkParams;
 }

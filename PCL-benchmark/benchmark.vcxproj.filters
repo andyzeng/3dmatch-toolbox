@@ -11,5 +11,6 @@
     <ClInclude Include="benchmarkUtil.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mLibInclude.h" />
+    <ClInclude Include="benchmarkParams.h" />
   </ItemGroup>
 </Project>
