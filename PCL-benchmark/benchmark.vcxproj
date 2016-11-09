@@ -25,6 +25,7 @@
     <ClInclude Include="benchmarkUtil.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="mLibInclude.h" />
+    <ClInclude Include="pclWrapperFPFH.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{533A2CA1-2445-4696-9F32-2A696DD65BD1}</ProjectGuid>
@@ -36,13 +37,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v140_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -60,12 +61,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Code\mLib\include;C:\Code\mLibExternal\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Code\mLib\include;C:\Code\mLibExternal\include;C:\Program Files\PCL 1.6.0\include\pcl-1.6;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Code\mLibExternal\libsWindows\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Code\mLib\include;C:\Code\mLibExternal\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Code\mLib\include;C:\Code\mLibExternal\include;C:\Program Files\PCL 1.6.0\include\pcl-1.6;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Code\mLibExternal\libsWindows\lib64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

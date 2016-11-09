@@ -8,6 +8,8 @@
 #include "benchmarkParams.h"
 #include "benchmarkUtil.h"
 
+#include "pclWrapperFPFH.h"
+
 #include "app.h"
 
 extern BenchmarkParams* g_benchmarkParams;

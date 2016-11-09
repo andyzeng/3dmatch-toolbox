@@ -12,5 +12,6 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="mLibInclude.h" />
     <ClInclude Include="benchmarkParams.h" />
+    <ClInclude Include="pclWrapperFPFH.h" />
   </ItemGroup>
 </Project>
