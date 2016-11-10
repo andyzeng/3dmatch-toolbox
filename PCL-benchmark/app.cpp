@@ -184,6 +184,11 @@ void App::computeFinalDescFile()
 		auto parts = util::split(line, " ");
 		for (int i = 0; i < descriptorSize; i++)
 			e.descriptor.push_back(convert::toFloat(parts[i]));
+
+		if (e.index % 100 == 0)
+		{
+			cout << "Loaded " << e.index << endl;
+		}
 	}
 
 	FILE *fOut = util::checkedFOpen(datasetDir + descOutFilename, "wb");
@@ -198,20 +203,103 @@ void App::computeFinalDescFile()
 	fclose(fOut);
 }
 
+int findClosestIndex(const PointCloudf &cloud, const vec3f &v)
+{
+	int bestIndex = -1;
+	float bestDistSq = numeric_limits<float>::max();
+	for (int i = 0; i < cloud.m_points.size(); i++)
+	{
+		const float d = vec3f::distSq(cloud.m_points[i], v);
+		if (d < bestDistSq)
+		{
+			bestDistSq = d;
+			bestIndex = i;
+		}
+	}
+	cout << "best dist: " << sqrt(bestDistSq) << endl;
+	return bestIndex;
+}
+
+void App::processFragment(const string &path)
+{
+	const string cacheTemp = datasetDir + "cacheFragmentFinal/";
+	const int maxPointCount = 50000;
+	PointCloudf cloud;
+	PointCloudIOf::loadFromPLY(path, cloud);
+	std::random_shuffle(cloud.m_points.begin(), cloud.m_points.end());
+	if(cloud.m_points.size() > maxPointCount) cloud.m_points.resize(maxPointCount);
+
+	const string filenameOnly = util::removeExtensions(util::getFilenameFromPath(path));
+	string fixedPath = util::remove(util::directoryFromPath(path), R"(C:\Code\3DMatch\dataset\synthetic\)");
+	fixedPath = util::remove(fixedPath, "/");
+	fixedPath = util::remove(fixedPath, "/");
+	const string baseName = fixedPath + "_" + filenameOnly;
+
+	const string rawFilename = cacheTemp + baseName + ".pcd";
+	const string normalFilename = cacheTemp + baseName + "-n" + to_string(normalK) + ".pcd";
+	const string fpfhFilename = cacheTemp + baseName + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + ".pcd";
+	const string asciiFilename = cacheTemp + baseName + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + "-ascii.pcd";
+	const string keypointFile = util::replace(path, ".ply", ".keypoints.bin");
+	const string descFile = util::replace(path, ".ply", ".keypoints.fpfh.descriptors.bin");
+
+	if (util::fileExists(descFile))
+	{
+		cout << "skipping " << baseName << endl;
+		//return;
+	}
+
+	cout << "processing " << baseName << endl;
+	PointCloudIOf::saveToPCD(rawFilename, cloud);
+	util::runSystemCommand("pcl_normal_estimation_release.exe " + rawFilename + " " + normalFilename + " -k " + to_string(normalK));
+	util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + fpfhFilename + " -k " + to_string(fpfhK));
+	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + fpfhFilename + " " + asciiFilename + " 0");
+
+	auto allDescLines = util::getFileLines(asciiFilename, 0);
+	
+	FILE *fileIn = util::checkedFOpen(keypointFile, "rb");
+	FILE *fileOut = util::checkedFOpen(descFile, "wb");
+	float n;
+	util::checkedFRead(&n, 4, 1, fileIn);
+
+	float x = n, y = descriptorSize;
+	util::checkedFWrite(&x, sizeof(float), 1, fileOut);
+	util::checkedFWrite(&y, sizeof(float), 1, fileOut);
+
+
+	cout << "loading " << n << " keypoints" << endl;
+	for (int i = 0; i < n; i++)
+	{
+		vec3f v;
+		util::checkedFRead(&v, sizeof(float), 3, fileIn);
+		int closestIdx = findClosestIndex(cloud, v);
+		const string descLine = allDescLines[targetLineIndex + closestIdx];
+		auto parts = util::split(descLine, " ");
+		parts.resize(descriptorSize);
+		for (auto &f : parts)
+		{
+			float v = convert::toFloat(f);
+			util::checkedFWrite(&v, sizeof(float), 1, fileOut);
+		}
+	}
+
+	fclose(fileIn);
+	fclose(fileOut);
+}
+
 void App::go()
 {
-	const bool keypointEval = true;
-	const bool fragmentEval = false;
+	const bool keypointEval = false;
+	const bool fragmentEval = true;
 	if (keypointEval)
 	{
-		loadKeypointMatchEntries();
+		//loadKeypointMatchEntries();
 		//loadKeypointMatchClouds();
 		//computeAllFPFH();
 		//computeKeypointDescriptors();
-		computeFinalDescFile();
+		//computeFinalDescFile();
 	}
 	if (fragmentEval)
 	{
-		
+		processFragment(R"(C:\Code\3DMatch\dataset\synthetic\iclnuim-livingroom1\cloud_bin_1.ply)");
 	}
 }

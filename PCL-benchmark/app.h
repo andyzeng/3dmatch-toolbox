@@ -22,6 +22,7 @@ struct App
 	void computeKeypointDescriptors();
 	void computeFinalDescFile();
 	void go();
+	void processFragment(const string &path);
 
 	void computeKeypointDescriptor(KeypointMatchEntry &entry);
 
