@@ -8,7 +8,7 @@
 typedef pcl::FPFHSignature33 FPFHDescriptor;
 typedef pcl::PFHSignature125 PFHDescriptor;
 
-class PCLUtil {
+struct PCLUtil {
 	static vector<float> makeFPFHDescriptor(const PointCloudf &mlibCloud, const vec3f &queryPt)
 	{
 		const float PCANormalRadius = 20.0f;
@@ -16,9 +16,9 @@ class PCLUtil {
 
 		pcl::PointCloud<FPFHDescriptor>::Ptr descriptors(new pcl::PointCloud<FPFHDescriptor>());
 
-		pcl::PointCloud<pcl::PointXYZ>::Ptr pclCloud(new pcl::PointCloud<pcl::PointXYZ>);
-		pcl::PointCloud<pcl::Normal>::Ptr pclNormals(new pcl::PointCloud<pcl::Normal>);
-
+		pcl::PointCloud<pcl::PointXYZ>::Ptr pclCloud(new pcl::PointCloud<pcl::PointXYZ>());
+		pcl::PointCloud<pcl::Normal>::Ptr pclNormals(new pcl::PointCloud<pcl::Normal>());
+		
 		//
 		// create PCL cloud
 		//
@@ -29,22 +29,26 @@ class PCLUtil {
 			pPCL.y = p.y;
 			pPCL.z = p.z;
 			pclCloud->push_back(pPCL);
+
+			//pcl::Normal nPCL;
+			//pclNormals->push_back(nPCL);
 		}
 
 		//
 		// compute normals
 		//
 		pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normEstimator;
-		pcl::search::KdTree<pcl::PointXYZ>::Ptr searchMethod(new pcl::search::KdTree<pcl::PointXYZ>);
+		pcl::search::KdTree<pcl::PointXYZ>::Ptr searchMethod(new pcl::search::KdTree<pcl::PointXYZ>());
 		normEstimator.setInputCloud(pclCloud);
 		normEstimator.setSearchMethod(searchMethod);
 		normEstimator.setRadiusSearch(PCANormalRadius);
+		cout << "normal points: " << pclCloud->size() << endl;
 		normEstimator.compute(*pclNormals);
 
 		//
 		// Find point closest to query
 		//
-		pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree(new pcl::search::KdTree<pcl::PointXYZ>);
+		pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree(new pcl::search::KdTree<pcl::PointXYZ>());
 		kdtree->setInputCloud(pclCloud);
 		pcl::PointXYZ pclQueryPoint(queryPt.x, queryPt.y, queryPt.z);
 		std::vector<int> pointIdxNKNSearch(1);

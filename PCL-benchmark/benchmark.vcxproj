@@ -37,13 +37,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -61,13 +61,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Code\mLib\include;C:\Code\mLibExternal\include;C:\Program Files\PCL 1.6.0\include\pcl-1.6;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Code\mLibExternal\libsWindows\lib64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\PCL 1.8.0\3rdParty\Boost\include\boost-1_61;C:\Code\mLib\include;C:\Code\mLibExternal\includeClone\;C:\Code\pcl-pcl-1.8.0\common\include;C:\Code\pcl-pcl-1.8.0\io\include;C:\Code\pcl-pcl-1.8.0\features\include;C:\Code\pcl-pcl-1.8.0\cmake-out\include;C:\Code\pcl-pcl-1.8.0\search\include;C:\Code\pcl-pcl-1.8.0\kdtree\include;C:\Code\pcl-pcl-1.8.0\octree\include;C:\Program Files\PCL 1.8.0\3rdParty\FLANN\include\;C:\Program Files\PCL 1.8.0\3rdParty\Eigen\eigen3;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Code\pcl-pcl-1.8.0\cmake-out\lib;C:\Program Files\PCL 1.8.0\3rdParty\Boost\lib;C:\Code\mLibExternal\libsWindows\lib64Clone;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Code\mLib\include;C:\Code\mLibExternal\include;C:\Program Files\PCL 1.6.0\include\pcl-1.6;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Code\mLibExternal\libsWindows\lib64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\PCL 1.8.0\3rdParty\Boost\include\boost-1_61;C:\Code\mLib\include;C:\Code\mLibExternal\includeClone\;C:\Code\pcl-pcl-1.8.0\common\include;C:\Code\pcl-pcl-1.8.0\io\include;C:\Code\pcl-pcl-1.8.0\features\include;C:\Code\pcl-pcl-1.8.0\cmake-out\include;C:\Code\pcl-pcl-1.8.0\search\include;C:\Code\pcl-pcl-1.8.0\kdtree\include;C:\Code\pcl-pcl-1.8.0\octree\include;C:\Program Files\PCL 1.8.0\3rdParty\FLANN\include\;C:\Program Files\PCL 1.8.0\3rdParty\Eigen\eigen3;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Code\pcl-pcl-1.8.0\cmake-out\lib;C:\Program Files\PCL 1.8.0\3rdParty\Boost\lib;C:\Code\mLibExternal\libsWindows\lib64Clone;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -82,7 +82,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freeimage.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeimage.lib;pcl_common_debug.lib;pcl_features_debug.lib;pcl_kdtree_debug.lib;pcl_search_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -102,13 +102,14 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <FloatingPointModel>Fast</FloatingPointModel>
       <PrecompiledHeaderFile>main.h</PrecompiledHeaderFile>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>freeimage.lib;libsndfile-1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeimage.lib;pcl_common_release.lib;pcl_kdtree_release.lib;pcl_search_release.lib;pcl_features_release.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
