@@ -1,18 +1,41 @@
 
 #include "main.h"
 
+//#define USE_FPFH
+#define USE_SPIN
+
 const float camK[9] = { 585,0,320,0,585,240,0,0,1 };
 const float descriptorRadius = 0.2f;
 const float descriptorRadiusSq = descriptorRadius * descriptorRadius;
 
 const int normalK = 50;
 const int fpfhK = 200;
-const int targetLineIndex = 11;
-const int descriptorSize = 33;
-const string datasetDir = R"(C:\Code\3DMatch\dataset\)";
-const string cacheBase = R"(C:\Code\3DMatch\dataset\cache\)";
 
+const float spinRadius = 0.3f; // fragment
+//const float spinRadius = 0.05f; // APC
+
+const int targetLineIndex = 11;
+const string datasetDir = R"(C:\Code\3DMatch\dataset\)";
+
+#ifdef USE_FPFH
+const bool useFPFH = true;
+const bool useSpin = false;
+const string descName = "fpfh";
 const string descOutFilename = "keypoint-FPFH.dat";
+const int descriptorSize = 33;
+#endif
+
+#ifdef USE_SPIN
+const bool useFPFH = false;
+const bool useSpin = true;
+const string descName = "spin";
+const string descOutFilename = "keypoint-spin.dat";
+const int descriptorSize = 153;
+#endif
+
+const string cacheBase = R"(C:\Code\3DMatch\dataset\cache)" + string("-") + descName + "\\";
+
+const string problemName = "APC";
 
 void App::loadKeypointMatchEntries()
 {
@@ -68,50 +91,21 @@ DepthImage App::makeDepthImage(const string &filename) const
 	return result;
 }
 
-/*void App::loadKeypointMatchClouds()
-{
-	for (auto &filename : filenameSet)
-	{
-		DepthImage *image = new DepthImage();
-		*image = makeDepthImage(filename);
-		allImages[filename] = image;
-		cout << "loaded i" << allImages.size() << endl;
-	}
-}*/
-
-/*void App::computeAllFPFH()
-{
-	const int normalK = 50;
-	const int fpfhK = 200;
-	const string cacheBase = R"(C:\Code\3DMatch\dataset\cache\)";
-	for (auto &e : allImages)
-	{
-		auto &points = e.second->points;
-		string fixedFilename = e.first;
-		fixedFilename = util::replace(fixedFilename, "data/test/", "");
-		fixedFilename = util::replace(fixedFilename, "/", "_");
-		const string baseFilename = fixedFilename;
-		const string rawFilename = cacheBase + fixedFilename + "-raw.pcd";
-		const string normalFilename = cacheBase + fixedFilename + "-n" + to_string(normalK) + ".pcd";
-		const string fpfhFilename = cacheBase + fixedFilename + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + ".pcd";
-		const string asciiFilename = cacheBase + fixedFilename + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + "-ascii.pcd";
-
-		if (util::fileExists(rawFilename))
-		{
-			cout << "skipping " << fixedFilename << endl;
-			continue;
-		}
-
-		cout << "processing " << fixedFilename << endl;
-		PointCloudIOf::saveToPCD(rawFilename, points);
-		util::runSystemCommand("pcl_normal_estimation_release.exe " + rawFilename + " " + normalFilename + " -k " + to_string(normalK));
-		util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + fpfhFilename + " -k " + to_string(fpfhK));
-		util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + fpfhFilename + " " + asciiFilename + " 0");
-	}
-}*/
-
 void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
 {
+	const string entryDesc = "e" + to_string(entry.index);
+	const string rawFilename = cacheBase + entryDesc + "-raw.pcd";
+	const string normalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + ".pcd";
+	const string descFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + ".pcd";
+	const string asciiFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + "-ascii.pcd";
+	const string finalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + "-desc.txt";
+
+	if (util::fileExists(finalFilename))
+	{
+		cout << "skipping " << finalFilename << endl;
+		return;
+	}
+
 	//DepthImage &image = *allImages[entry.file];
 	DepthImage image = makeDepthImage(entry.file);
 
@@ -135,34 +129,25 @@ void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
 	cout << "Local cloud points: " << localCloud.m_points.size() << endl;
 	cout << "Total cloud points: " << image.points.m_points.size() << endl;
 
-	const string entryDesc = "e" + to_string(entry.index);
-	const string rawFilename = cacheBase + entryDesc + "-raw.pcd";
-	const string normalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + ".pcd";
-	const string fpfhFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + ".pcd";
-	const string asciiFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + "-ascii.pcd";
-	const string finalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + "-desc.txt";
-
-	if (util::fileExists(finalFilename))
-	{
-		cout << "skipping " << finalFilename << endl;
-		return;
-	}
-
 	cout << "processing " << entryDesc << endl;
 	cout << "query pt: " << queryPt << endl;
 	PointCloudIOf::saveToPCD(rawFilename, localCloud);
 	util::runSystemCommand("pcl_normal_estimation_release.exe " + rawFilename + " " + normalFilename + " -k " + to_string(normalK));
-	util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + fpfhFilename + " -k " + to_string(fpfhK));
-	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + fpfhFilename + " " + asciiFilename + " 0");
-
+	if (useFPFH)
+	{
+		util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + descFilename + " -k " + to_string(fpfhK));
+	}
+	if (useSpin)
+	{
+		util::runSystemCommand("pcl_spin_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
+	}
+	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + descFilename + " " + asciiFilename + " 0");
 	const string outLine = util::getFileLines(asciiFilename, 0)[targetLineIndex];
 	auto parts = util::split(outLine, " ");
 	parts.resize(descriptorSize);
 	ofstream outFile(finalFilename);
 	for (auto &f : parts)
 		outFile << f << " ";
-
-	//entry.descriptor = PCLUtil::makeFPFHDescriptor(localCloud, queryPt);
 }
 
 void App::computeKeypointDescriptors()
@@ -179,7 +164,7 @@ void App::computeFinalDescFile()
 	for (auto &e : keypointMatchEntries)
 	{
 		const string entryDesc = "e" + to_string(e.index);
-		const string finalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + "-desc.txt";
+		const string finalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + "-desc.txt";
 		const string line = util::getFileLines(finalFilename)[0];
 		auto parts = util::split(line, " ");
 		for (int i = 0; i < descriptorSize; i++)
@@ -216,43 +201,65 @@ int findClosestIndex(const PointCloudf &cloud, const vec3f &v)
 			bestIndex = i;
 		}
 	}
-	cout << "best dist: " << sqrt(bestDistSq) << endl;
+	//cout << "best dist: " << sqrt(bestDistSq) << endl;
 	return bestIndex;
 }
 
-void App::processFragment(const string &path)
+void App::processAllFragments(const string &dir, const string &subfolder)
 {
-	const string cacheTemp = datasetDir + "cacheFragmentFinal/";
-	const int maxPointCount = 50000;
-	PointCloudf cloud;
-	PointCloudIOf::loadFromPLY(path, cloud);
-	std::random_shuffle(cloud.m_points.begin(), cloud.m_points.end());
-	if(cloud.m_points.size() > maxPointCount) cloud.m_points.resize(maxPointCount);
+	vector<string> allFiles = Directory::enumerateFilesWithPath(dir, ".ply");
+#pragma omp parallel for schedule(dynamic)
+	for (int i = 0; i < allFiles.size(); i++)
+	{
+		processFragment(allFiles[i], subfolder);
+	}
+}
 
+void App::processFragment(const string &path, const string &subfolder)
+{
+	const string cacheTemp = datasetDir + "cacheFragmentTemp-" + problemName + "-" + descName + "/";
+	const string descOutDir = datasetDir + "fragmentOut-" + problemName + "-" + descName + "/" + subfolder + "/";
+	util::makeDirectory(cacheTemp);
+	util::makeDirectory(descOutDir);
+	const int maxPointCount = 30000;
+	
 	const string filenameOnly = util::removeExtensions(util::getFilenameFromPath(path));
-	string fixedPath = util::remove(util::directoryFromPath(path), R"(C:\Code\3DMatch\dataset\synthetic\)");
-	fixedPath = util::remove(fixedPath, "/");
-	fixedPath = util::remove(fixedPath, "/");
-	const string baseName = fixedPath + "_" + filenameOnly;
+	string fixedPath = util::remove(util::directoryFromPath(path), R"(C:\Code\3DMatch\dataset\)");
+	fixedPath = util::replace(fixedPath, "/", "_");
+	fixedPath = util::replace(fixedPath, "\\", "_");
+	const string baseName = fixedPath + filenameOnly;
 
 	const string rawFilename = cacheTemp + baseName + ".pcd";
 	const string normalFilename = cacheTemp + baseName + "-n" + to_string(normalK) + ".pcd";
-	const string fpfhFilename = cacheTemp + baseName + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + ".pcd";
-	const string asciiFilename = cacheTemp + baseName + "-n" + to_string(normalK) + "-fpfh" + to_string(fpfhK) + "-ascii.pcd";
+	const string descFilename = cacheTemp + baseName + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + ".pcd";
+	const string asciiFilename = cacheTemp + baseName + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + "-ascii.pcd";
 	const string keypointFile = util::replace(path, ".ply", ".keypoints.bin");
-	const string descFile = util::replace(path, ".ply", ".keypoints.fpfh.descriptors.bin");
+	const string descFile = descOutDir + filenameOnly + ".keypoints." + descName + ".descriptors.bin";
 
 	if (util::fileExists(descFile))
 	{
 		cout << "skipping " << baseName << endl;
-		//return;
+		return;
 	}
+
+	PointCloudf cloud;
+	PointCloudIOf::loadFromPLY(path, cloud);
+	//PointCloudIOf::saveToPLY(path + "echo", cloud);
+	std::random_shuffle(cloud.m_points.begin(), cloud.m_points.end());
+	if (cloud.m_points.size() > maxPointCount) cloud.m_points.resize(maxPointCount);
 
 	cout << "processing " << baseName << endl;
 	PointCloudIOf::saveToPCD(rawFilename, cloud);
 	util::runSystemCommand("pcl_normal_estimation_release.exe " + rawFilename + " " + normalFilename + " -k " + to_string(normalK));
-	util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + fpfhFilename + " -k " + to_string(fpfhK));
-	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + fpfhFilename + " " + asciiFilename + " 0");
+	if (useFPFH)
+	{
+		util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + descFilename + " -k " + to_string(fpfhK));
+	}
+	if (useSpin)
+	{
+		util::runSystemCommand("pcl_spin_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
+	}
+	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + descFilename + " " + asciiFilename + " 0");
 
 	auto allDescLines = util::getFileLines(asciiFilename, 0);
 	
@@ -288,18 +295,76 @@ void App::processFragment(const string &path)
 
 void App::go()
 {
-	const bool keypointEval = false;
-	const bool fragmentEval = true;
+	util::makeDirectory(cacheBase);
+
+	const bool keypointEval = true;
+	const bool fragmentEval = false;
+	const bool APCEval = false;
 	if (keypointEval)
 	{
-		//loadKeypointMatchEntries();
-		//loadKeypointMatchClouds();
-		//computeAllFPFH();
-		//computeKeypointDescriptors();
-		//computeFinalDescFile();
+		loadKeypointMatchEntries();
+		computeKeypointDescriptors();
+		computeFinalDescFile();
+	}
+	if (APCEval)
+	{
+		processAllFragments(R"(C:\Code\3DMatch\dataset\apc\objects\)", "objects");
+
+		vector<string> fragmentList;
+		for (auto &s : Directory::enumerateDirectoriesWithPath(R"(C:\Code\3DMatch\dataset\apc\scenarios)"))
+		{
+			fragmentList.push_back(s);
+		}
+
+#pragma omp parallel for schedule(dynamic)
+		for (int i = 0; i < fragmentList.size(); i++)
+		{
+			const string fragmentName = util::split(fragmentList[i], "\\").back();
+			processAllFragments(fragmentList[i], fragmentName);
+		}
 	}
 	if (fragmentEval)
 	{
-		processFragment(R"(C:\Code\3DMatch\dataset\synthetic\iclnuim-livingroom1\cloud_bin_1.ply)");
+		vector<string> fragmentList;
+		//fragmentList.push_back(datasetDir + "synthetic\\iclnuim-livingroom1\\");
+		//fragmentList.push_back(datasetDir + "synthetic\\iclnuim-livingroom2\\");
+		//fragmentList.push_back(datasetDir + "synthetic\\iclnuim-office1\\");
+		//fragmentList.push_back(datasetDir + "synthetic\\iclnuim-office2\\");
+		//
+		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen1\\");
+		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen2\\");
+		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen3\\");
+		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen4\\");
+		//									 
+		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c3-hv_c3_1\\");
+		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c6-hv_c6_1\\");
+		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c8-hv_c8_3\\");
+		fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c11-hv_c11_2\\");
+		fragmentList.push_back(datasetDir + "real\\sun3d-hotel_umd-maryland_hotel3\\");
+
+#pragma omp parallel for schedule(dynamic)
+		for (int i = 0; i < fragmentList.size(); i++)
+		{
+			const string fragmentName = util::split(fragmentList[i], "\\").back();
+			processAllFragments(fragmentList[i], fragmentName);
+		}
+
+		//processFragment(R"(C:\Code\3DMatch\dataset\synthetic\iclnuim-livingroom1\cloud_bin_1.ply)");
+		//return;
+		/*processAllFragments(datasetDir + "synthetic\\iclnuim-livingroom1\\", "iclnuim-livingroom1");
+		processAllFragments(datasetDir + "synthetic\\iclnuim-livingroom2\\", "iclnuim-livingroom2");
+		processAllFragments(datasetDir + "synthetic\\iclnuim-office1\\", "iclnuim-office1");
+		processAllFragments(datasetDir + "synthetic\\iclnuim-office2\\", "iclnuim-office2");
+
+		processAllFragments(datasetDir + "real\\7-scenes-redkitchen1\\", "7-scenes-redkitchen1");
+		processAllFragments(datasetDir + "real\\7-scenes-redkitchen2\\", "7-scenes-redkitchen2");
+		processAllFragments(datasetDir + "real\\7-scenes-redkitchen3\\", "7-scenes-redkitchen3");
+		processAllFragments(datasetDir + "real\\7-scenes-redkitchen4\\", "7-scenes-redkitchen4");
+
+		processAllFragments(datasetDir + "real\\sun3d-harvard_c3-hv_c3_1\\", "sun3d-harvard_c3-hv_c3_1");
+		processAllFragments(datasetDir + "real\\sun3d-harvard_c6-hv_c6_1\\", "sun3d-harvard_c6-hv_c6_1");
+		processAllFragments(datasetDir + "real\\sun3d-harvard_c11-hv_c11_2\\", "sun3d-harvard_c11-hv_c11_2");
+		processAllFragments(datasetDir + "real\\sun3d-harvard_c11-hv_c11_2\\", "sun3d-harvard_c11-hv_c11_2");
+		processAllFragments(datasetDir + "real\\sun3d-hotel_umd-maryland_hotel3\\", "sun3d-hotel_umd-maryland_hotel3");*/
 	}
 }

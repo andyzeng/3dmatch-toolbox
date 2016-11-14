@@ -27,6 +27,9 @@
     <ClInclude Include="mLibInclude.h" />
     <ClInclude Include="pclWrapperFPFH.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="old.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{533A2CA1-2445-4696-9F32-2A696DD65BD1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
