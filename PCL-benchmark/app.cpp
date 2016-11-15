@@ -1,17 +1,18 @@
 
 #include "main.h"
 
-//#define USE_FPFH
-#define USE_SPIN
+#define USE_FPFH
+//#define USE_SPIN
 
 const float camK[9] = { 585,0,320,0,585,240,0,0,1 };
 const float descriptorRadius = 0.2f;
 const float descriptorRadiusSq = descriptorRadius * descriptorRadius;
 
-const int normalK = 50;
-const int fpfhK = 200;
+const int normalK = 100;
+const int fpfhK = 1500;
 
-const float spinRadius = 0.3f; // fragment
+const float spinRadius = 20.0f; // keypoint-tsdf
+//const float spinRadius = 0.3f; // fragment
 //const float spinRadius = 0.05f; // APC
 
 const int targetLineIndex = 11;
@@ -33,7 +34,7 @@ const string descOutFilename = "keypoint-spin.dat";
 const int descriptorSize = 153;
 #endif
 
-const string cacheBase = R"(C:\Code\3DMatch\dataset\cache)" + string("-") + descName + "\\";
+const string cacheBase = R"(D:\Code\3DMatch\dataset\cacheYY)" + string("-") + descName + "\\";
 
 const string problemName = "APC";
 
@@ -159,6 +160,37 @@ void App::computeKeypointDescriptors()
 	}
 }
 
+void App::computeFinalDescFileTDFs()
+{
+	const int descCount = 15000;
+	vector< vector<float> > descriptors(descCount);
+	for (int i = 0; i < descCount; i++)
+	{
+		//0-n50-spin1000-desc.txt
+		const string descFilename = cacheBase + to_string(i) + "-n100-" + descName + "1500-desc.txt";
+		const string line = util::getFileLines(descFilename)[0];
+		auto parts = util::split(line, " ");
+		for (int j = 0; j < descriptorSize; j++)
+			descriptors[i].push_back(convert::toFloat(parts[j]));
+
+		if (i % 100 == 0)
+		{
+			cout << "Loaded " << i << endl;
+		}
+	}
+
+	FILE *fOut = util::checkedFOpen(datasetDir + "TDF-" + descOutFilename, "wb");
+	float descCountF = descCount;
+	float descriptorDim = descriptorSize;
+	util::checkedFWrite(&descCountF, 4, 1, fOut);
+	util::checkedFWrite(&descriptorDim, 4, 1, fOut);
+	for (int i = 0; i < descCount; i++)
+	{
+		util::checkedFWrite(descriptors[i].data(), 4, descriptorDim, fOut);
+	}
+	fclose(fOut);
+}
+
 void App::computeFinalDescFile()
 {
 	for (auto &e : keypointMatchEntries)
@@ -213,6 +245,66 @@ void App::processAllFragments(const string &dir, const string &subfolder)
 	{
 		processFragment(allFiles[i], subfolder);
 	}
+}
+
+PointCloudf makePointCloudFromBin(const string &filenameIn)
+{
+	FILE *fileIn = util::checkedFOpen(filenameIn, "rb");
+	float n;
+	util::checkedFRead(&n, 4, 1, fileIn);
+
+	PointCloudf result;
+	result.m_points.push_back(vec3f::origin);
+	cout << "loading " << n << " keypoints" << endl;
+	for (int i = 0; i < n; i++)
+	{
+		vec3f v;
+		util::checkedFRead(&v, sizeof(float), 3, fileIn);
+		result.m_points.push_back(v);
+	}
+	fclose(fileIn);
+	return result;
+}
+
+void App::computeBinDescriptor(const string &filenameIn, const string &filenameOut)
+{
+	const string entryDesc = util::removeExtensions(util::fileNameFromPath(filenameIn));
+	const string rawFilename = cacheBase + entryDesc + "-raw.pcd";
+	const string normalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + ".pcd";
+	const string descFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + ".pcd";
+	const string asciiFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + "-ascii.pcd";
+	const string finalFilename = cacheBase + entryDesc + "-n" + to_string(normalK) + "-" + descName + to_string(fpfhK) + "-desc.txt";
+
+	if (util::fileExists(finalFilename))
+	{
+		cout << "skipping " << finalFilename << endl;
+		return;
+	}
+
+	const PointCloudf cloud = makePointCloudFromBin(filenameIn);
+	cout << "Local cloud points: " << cloud.m_points.size() << endl;
+	//PointCloudIOf::saveToPLY("test.ply", cloud);
+	//return;
+	
+	cout << "processing " << entryDesc << endl;
+	PointCloudIOf::saveToPCD(rawFilename, cloud);
+	util::runSystemCommand("pcl_normal_estimation_release.exe " + rawFilename + " " + normalFilename + " -k " + to_string(normalK));
+	if (useFPFH)
+	{
+		util::runSystemCommand("pcl_fpfh_estimation_release.exe " + normalFilename + " " + descFilename + " -k " + to_string(fpfhK));
+	}
+	if (useSpin)
+	{
+		util::runSystemCommand("pcl_spin_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
+	}
+	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + descFilename + " " + asciiFilename + " 0");
+	const string outLine = util::getFileLines(asciiFilename, 0)[targetLineIndex];
+	auto parts = util::split(outLine, " ");
+	parts.resize(descriptorSize);
+	ofstream outFile(finalFilename);
+	for (auto &f : parts)
+		outFile << f << " ";
+
 }
 
 void App::processFragment(const string &path, const string &subfolder)
@@ -302,9 +394,22 @@ void App::go()
 	const bool APCEval = false;
 	if (keypointEval)
 	{
-		loadKeypointMatchEntries();
-		computeKeypointDescriptors();
-		computeFinalDescFile();
+		vector<string> fragmentList;
+		for (auto &s : Directory::enumerateFilesWithPath(R"(C:\Code\3DMatch\dataset\for-matt)", ".bin"))
+		{
+			fragmentList.push_back(s);
+		}
+
+#pragma omp parallel for schedule(dynamic)
+		for (int i = 0; i < fragmentList.size(); i++)
+		{
+			//computeBinDescriptor(fragmentList[i], "");
+		}
+
+		computeFinalDescFileTDFs();
+		//loadKeypointMatchEntries();
+		//computeKeypointDescriptors();
+		//computeFinalDescFile();
 	}
 	if (APCEval)
 	{
@@ -315,8 +420,8 @@ void App::go()
 		{
 			fragmentList.push_back(s);
 		}
-
-#pragma omp parallel for schedule(dynamic)
+		//num_threads(7)
+#pragma omp parallel for schedule(dynamic) num_threads(16)
 		for (int i = 0; i < fragmentList.size(); i++)
 		{
 			const string fragmentName = util::split(fragmentList[i], "\\").back();
