@@ -4,3 +4,5 @@
 /PCL-benchmark/.vs/benchmark/v14/*.suo
 /PCL-benchmark/*.opendb
 /PCL-benchmark/*.db
+/PCL-benchmark/old.txt
+/PCL-benchmark/test.ply

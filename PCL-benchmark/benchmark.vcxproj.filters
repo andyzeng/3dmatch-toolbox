@@ -14,4 +14,7 @@
     <ClInclude Include="benchmarkParams.h" />
     <ClInclude Include="pclWrapperFPFH.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="old.txt" />
+  </ItemGroup>
 </Project>
