@@ -1,0 +1,277 @@
+{
+	"train":
+		{
+			"path": "3dmatch_train",
+			"solver": "SGD",
+			"regularizer": "L2",
+			"momentum": 0.99,
+			"weight_decay": 0.0005,
+			"base_lr": 0.001,
+			"lr_policy": "LR_step",
+			"lr_gamma": 0.1,
+			"lr_stepsize":10000000,
+			"max_iter": 10000000,
+			"train_iter": 1,
+			"snapshot_iter": 1000,
+			"display_iter": 1,
+			"test_iter": 1,
+			"test_interval": 1000,
+			"debug_mode": false,
+			"GPU_solver": 0,
+			"GPU": [0]
+		},
+	"test":
+		{
+			"debug_mode": false,
+			"GPU": 0
+		},
+	"layers":[
+		{
+			"type": "MatchData",
+			"name": "dataTrain",
+			"phase": "Training",
+			"data_path": "../data/train",
+			"batch_size": 64,
+			"out": ["data_match1","data_match2","data_nonmatch","label_match","label_nonmatch"]
+		},
+		{
+			"type": "MatchData",
+			"name": "dataTest",
+			"phase": "Testing",
+			"data_path": "../data/test",
+			"batch_size": 64,
+			"out": ["data_match1","data_match2","data_nonmatch","label_match","label_nonmatch"]
+		},
+		{
+			"in": ["data_match1","data_match2","data_nonmatch"],
+			"type": "Convolution",
+			"name": "conv1",
+			"num_output": 64,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv1_match1","conv1_match2","conv1_nonmatch"]
+		},
+		{
+			"in": ["conv1_match1","conv1_match2","conv1_nonmatch"],
+			"type": "Activation",
+			"name": "relu1",
+			"mode": "ReLU",
+			"out": ["conv1_match1","conv1_match2","conv1_nonmatch"]
+		},
+		{
+			"in": ["conv1_match1","conv1_match2","conv1_nonmatch"],
+			"type": "Convolution",
+			"name": "conv2",
+			"num_output": 64,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv2_match1","conv2_match2","conv2_nonmatch"]
+		},
+		{
+			"in": ["conv2_match1","conv2_match2","conv2_nonmatch"],
+			"type": "Activation",
+			"name": "relu2",
+			"mode": "ReLU",
+			"out": ["conv2_match1","conv2_match2","conv2_nonmatch"]
+		},
+		{
+			"in": ["conv2_match1","conv2_match2","conv2_nonmatch"],
+			"type": "Pooling",
+			"name": "pool1",
+			"mode": "max",
+			"window": [2,2,2],
+			"padding": [0,0,0],
+			"stride": [2,2,2],
+			"out": ["pool1_match1","pool1_match2","pool1_nonmatch"]
+		},
+		{
+			"in": ["pool1_match1","pool1_match2","pool1_nonmatch"],
+			"type": "Convolution",
+			"name": "conv3",
+			"num_output": 128,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv3_match1","conv3_match2","conv3_nonmatch"]
+		},
+		{
+			"in": ["conv3_match1","conv3_match2","conv3_nonmatch"],
+			"type": "Activation",
+			"name": "relu3",
+			"mode": "ReLU",
+			"out": ["conv3_match1","conv3_match2","conv3_nonmatch"]
+		},
+		{
+			"in": ["conv3_match1","conv3_match2","conv3_nonmatch"],
+			"type": "Convolution",
+			"name": "conv4",
+			"num_output": 128,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv4_match1","conv4_match2","conv4_nonmatch"]
+		},
+		{
+			"in": ["conv4_match1","conv4_match2","conv4_nonmatch"],
+			"type": "Activation",
+			"name": "relu4",
+			"mode": "ReLU",
+			"out": ["conv4_match1","conv4_match2","conv4_nonmatch"]
+		},
+		{
+			"in": ["conv4_match1","conv4_match2","conv4_nonmatch"],
+			"type": "Convolution",
+			"name": "conv5",
+			"num_output": 256,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv5_match1","conv5_match2","conv5_nonmatch"]
+		},
+		{
+			"in": ["conv5_match1","conv5_match2","conv5_nonmatch"],
+			"type": "Activation",
+			"name": "relu5",
+			"mode": "ReLU",
+			"out": ["conv5_match1","conv5_match2","conv5_nonmatch"]
+		},
+		{
+			"in": ["conv5_match1","conv5_match2","conv5_nonmatch"],
+			"type": "Convolution",
+			"name": "conv6",
+			"num_output": 256,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv6_match1","conv6_match2","conv6_nonmatch"]
+		},
+		{
+			"in": ["conv6_match1","conv6_match2","conv6_nonmatch"],
+			"type": "Activation",
+			"name": "relu6",
+			"mode": "ReLU",
+			"out": ["conv6_match1","conv6_match2","conv6_nonmatch"]
+		},
+		{
+			"in": ["conv6_match1","conv6_match2","conv6_nonmatch"],
+			"type": "Convolution",
+			"name": "conv7",
+			"num_output": 512,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv7_match1","conv7_match2","conv7_nonmatch"]
+		},
+		{
+			"in": ["conv7_match1","conv7_match2","conv7_nonmatch"],
+			"type": "Activation",
+			"name": "relu7",
+			"mode": "ReLU",
+			"out": ["conv7_match1","conv7_match2","conv7_nonmatch"]
+		},
+		{
+			"in": ["conv7_match1","conv7_match2","conv7_nonmatch"],
+			"type": "Convolution",
+			"name": "conv8",
+			"num_output": 512,
+			"window": [3,3,3],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["conv8_match1","conv8_match2","conv8_nonmatch"]
+		},
+		{
+			"in": ["conv8_match1","conv8_match2","conv8_nonmatch"],
+			"type": "Activation",
+			"name": "relu8",
+			"mode": "ReLU",
+			"out": ["conv8_match1","conv8_match2","conv8_nonmatch"]
+		},
+		{
+			"in": ["conv8_match1","conv8_match2","conv8_nonmatch"],
+			"type": "Convolution",
+			"name": "feat",
+			"num_output": 512,
+			"window": [1,1,1],
+			"padding": [0,0,0],
+			"stride": [1,1,1],
+			"upscale": [1,1,1],
+			"weight_lr_mult": 1.0,
+			"weight_filler": "Xavier",
+			"bias_lr_mult": 2.0,
+			"bias_filler": "Constant",
+			"bias_filler_param": 0.0,
+			"train_me": true,
+			"out": ["feat_match1","feat_match2","feat_nonmatch"]
+		},
+		{
+            "in": ["feat_match1","feat_match2","label_match"],
+            "type": "Loss",
+            "name": "loss_match2",
+            "mode": "Contrastive"
+        },
+		{
+            "in": ["feat_match1","feat_nonmatch","label_nonmatch"],
+            "type": "Loss",
+            "name": "loss_nonmatch",
+            "mode": "Contrastive"
+        }
+	]
+}
