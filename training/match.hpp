@@ -448,11 +448,11 @@ public:
         break;
       }
 
-      std::cout << file_prefix_p1 << " " << p1_pix_x << " " << p1_pix_y << std::endl;
-      std::cout << file_prefix_p2 << " " << p2_pix_x << " " << p2_pix_y << std::endl;
-      std::cout << file_prefix_p3 << " " << p3_pix_x << " " << p3_pix_y << std::endl << std::endl;
+      // For debugging
+      // std::cout << file_prefix_p1 << " " << p1_pix_x << " " << p1_pix_y << std::endl;
+      // std::cout << file_prefix_p2 << " " << p2_pix_x << " " << p2_pix_y << std::endl;
+      // std::cout << file_prefix_p3 << " " << p3_pix_x << " " << p3_pix_y << std::endl << std::endl;
 
-      // std::string baseFrameColorFile = baseFramePrefix + ".color.png";
       std::string depth_im_file_p1 = file_prefix_p1 + ".depth.png";
       std::string cam_pose_file_p1 = file_prefix_p1 + ".pose.txt";
       std::string depth_im_file_p2 = file_prefix_p2 + ".depth.png";
@@ -473,7 +473,7 @@ public:
       float * voxel_grid_TDF_p1 = new float[num_grid_pts];
       GetLocalPointvoxel_grid_TDF(p1_pix_x, p1_pix_y, cam_K_p1, depth_im_p1, im_height, im_width, voxel_grid_TDF_p1, voxel_grid_dim, voxel_size, trunc_margin);
 
-      // Debugging
+      // For debugging
       // FILE *fp = fopen("debugBaseMatch.txt", "w");
       // int iret = fprintf(fp, "path:%s x:%d y:%d\n",baseFramePrefix.c_str(),corresBasePointX[match_idx],corresBasePointY[match_idx]);
       // for (int i = 0; i < num_grid_pts; ++i)
@@ -507,10 +507,10 @@ public:
       checkCUDA(__LINE__, cudaMemcpy(&(data_GPU[0][batch_idx * num_grid_pts]), voxel_grid_TDF_p1, num_grid_pts * sizeofStorageT, cudaMemcpyHostToDevice));
       checkCUDA(__LINE__, cudaMemcpy(&(data_GPU[1][batch_idx * num_grid_pts]), voxel_grid_TDF_p2, num_grid_pts * sizeofStorageT, cudaMemcpyHostToDevice));
       checkCUDA(__LINE__, cudaMemcpy(&(data_GPU[2][batch_idx * num_grid_pts]), voxel_grid_TDF_p3, num_grid_pts * sizeofStorageT, cudaMemcpyHostToDevice));
-      float posLabel = 1.0f;
-      float negLabel = 0.0f;
-      checkCUDA(__LINE__, cudaMemcpy(&(label_GPU[0][batch_idx]), &posLabel, sizeofStorageT, cudaMemcpyHostToDevice));
-      checkCUDA(__LINE__, cudaMemcpy(&(label_GPU[1][batch_idx]), &negLabel, sizeofStorageT, cudaMemcpyHostToDevice));
+      float pos_label = 1.0f;
+      float neg_label = 0.0f;
+      checkCUDA(__LINE__, cudaMemcpy(&(label_GPU[0][batch_idx]), &pos_label, sizeofStorageT, cudaMemcpyHostToDevice));
+      checkCUDA(__LINE__, cudaMemcpy(&(label_GPU[1][batch_idx]), &neg_label, sizeofStorageT, cudaMemcpyHostToDevice));
 
       // Clear memory
       delete [] depth_im_p1;
@@ -524,14 +524,14 @@ public:
   };
 
   void forward(Phase phase_) {
-    // lock.wait();
+    lock.wait();
     std::swap(out[0]->dataGPU, data_GPU[0]);
     std::swap(out[1]->dataGPU, data_GPU[1]);
     std::swap(out[2]->dataGPU, data_GPU[2]);
     std::swap(out[3]->dataGPU, label_GPU[0]);
     std::swap(out[4]->dataGPU, label_GPU[1]);
-    // lock = std::async(std::launch::async, &MatchDataLayer<T>::prefetch, this);
-    prefetch();
+    lock = std::async(std::launch::async, &MatchDataLayer<T>::prefetch, this);
+    // prefetch();
   };
 
 
@@ -587,8 +587,8 @@ public:
     checkCUDA(__LINE__, cudaMalloc(&label_GPU[1], numel(label_dim) * sizeofStorageT) );
     memory_bytes += numel(label_dim) * sizeofStorageT;
 
-    // lock = std::async(std::launch::async, &MatchDataLayer<T>::prefetch, this);
-    prefetch();
+    lock = std::async(std::launch::async, &MatchDataLayer<T>::prefetch, this);
+    // prefetch();
 
     return memory_bytes;
   };
