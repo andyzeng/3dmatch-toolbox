@@ -11,6 +11,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <string>
 #include "utils.hpp"
 
 // CUDA kernel function to integrate a TSDF voxel volume given depth images
@@ -96,6 +97,20 @@ int main(int argc, char * argv[]) {
   int voxel_grid_dim_x = 500;
   int voxel_grid_dim_y = 500;
   int voxel_grid_dim_z = 500;
+
+  // Manual parameters
+  if (argc > 1) {
+    cam_K_file = argv[1];
+    data_path = argv[2];
+    base_frame_idx = atoi(argv[3]);
+    first_frame_idx = atoi(argv[4]);
+    num_frames = atof(argv[5]);
+    voxel_grid_origin_x = atof(argv[6]);
+    voxel_grid_origin_y = atof(argv[7]);
+    voxel_grid_origin_z = atof(argv[8]);
+    voxel_size = atof(argv[9]);
+    trunc_margin = atof(argv[10]);
+  }
 
   // Read camera intrinsics
   std::vector<float> cam_K_vec = LoadMatrixFromFile(cam_K_file, 3, 3);
