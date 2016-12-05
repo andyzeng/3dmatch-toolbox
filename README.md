@@ -1,5 +1,5 @@
 # 3DMatch Toolbox
-3DMatch is a ConvNet-based local geometric feature descriptor that operates on 3D data (i.e. point clouds, depth maps, meshes, etc.). This toolbox provides code to use 3DMatch for geometric registration and keypoint matching, as well as code to train 3DMatch from existing RGB-D reconstructions. This is the reference implementation of models and code for our paper:
+3DMatch is a ConvNet-based local geometric feature descriptor that operates on 3D data (i.e. point clouds, depth maps, meshes, etc.). This toolbox provides code to use 3DMatch for geometric registration and keypoint matching, as well as code to train 3DMatch from existing RGB-D reconstructions. This is the reference implementation of our paper:
 
 ### 3DMatch: Learning Local Geometric Descriptors from 3D Reconstructions ([pdf](), [arxiv](), [webpage](http://3dmatch.cs.princeton.edu/))
 

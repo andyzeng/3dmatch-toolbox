@@ -133,7 +133,6 @@ int main(int argc, char * argv[]) {
   }
 
   // Initialize TDF voxel grid
-  tic();
   float * voxel_grid_TDF = new float[voxel_grid_dim_x * voxel_grid_dim_y * voxel_grid_dim_z];
   memset(voxel_grid_TDF, 0, sizeof(float) * voxel_grid_dim_x * voxel_grid_dim_y * voxel_grid_dim_z);
 
@@ -159,7 +158,6 @@ int main(int argc, char * argv[]) {
   // Load TDF voxel grid from GPU to CPU memory
   cudaMemcpy(voxel_grid_TDF, gpu_voxel_grid_TDF, voxel_grid_dim_x * voxel_grid_dim_y * voxel_grid_dim_z * sizeof(float), cudaMemcpyDeviceToHost);
   marvin::checkCUDA(__LINE__, cudaGetLastError());
-  toc();
 
   // Compute random surface keypoints in point cloud coordinates and voxel grid coordinates
   std::cout << "Finding random surface keypoints..." << std::endl;

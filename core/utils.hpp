@@ -10,16 +10,6 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 
-#include <ctime>
-std::clock_t tic_toc_timer;
-void tic() {
-  tic_toc_timer = clock();
-}
-void toc() {
-  std::clock_t toc_timer = clock();
-  printf("Elapsed time is %f seconds.\n", double(toc_timer - tic_toc_timer) / CLOCKS_PER_SEC);
-}
-
 // Return a random float between min and max
 float GetRandomFloat(float min, float max) {
   std::random_device rd;
@@ -268,4 +258,15 @@ bool invert_matrix(const float m[16], float invOut[16]) {
 //     std::cerr << "CUDA failure at LINE " << lineNumber << ": " << status << std::endl;
 //     FatalError();
 //   }
+// }
+
+// #include <ctime>
+// // Timers
+// std::clock_t tic_toc_timer;
+// void tic() {
+//   tic_toc_timer = clock();
+// }
+// void toc() {
+//   std::clock_t toc_timer = clock();
+//   printf("Elapsed time is %f seconds.\n", double(toc_timer - tic_toc_timer) / CLOCKS_PER_SEC);
 // }
