@@ -14,15 +14,20 @@ Matching local geometric features on real-world depth images is a challenging ta
 If you find this code useful in your work, please consider citing:
 
 ```shell
-
+@article{zeng20163dmatch, 
+	title={3DMatch: Learning Local Geometric Descriptors from RGB-D Reconstructions}, 
+	author={Zeng, Andy and Song, Shuran and Nie{\ss}ner, Matthias and Fisher, Matthew and Xiao, Jianxiong and Funkhouser, Thomas}, 
+	journal={arXiv preprint arXiv:1603.08182}, 
+	year={2016} 
+}
 ```
 
 #### License
 
 This code is released under the Simplified BSD License (refer to the LICENSE file for details).
 
-#### Datasets
-All relevant dataset information and downloads can be found [here](http://3dmatch.cs.princeton.edu/).
+#### Benchmarks and Datasets
+All relevant information and downloads can be found [here](http://3dmatch.cs.princeton.edu/).
 
 #### Contact
 If you have any questions or find any bugs, please let me know: [Andy Zeng](http://www.cs.princeton.edu/~andyz/) andyz[at]princeton[dot]edu
