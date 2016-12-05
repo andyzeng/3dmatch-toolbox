@@ -49,12 +49,12 @@ sudo cp cuda/include/* /usr/local/cudnn/v5/include/
 3. Matlab 2015b or higher (tested with Matlab 2016a)
 
 ## Table of Contents
-* [A Quick Start: Align Two Point Clouds with 3DMatch](#a-quick-start:-align-two-point-clouds-with-3dmatch)
+* [Quick Start Demo: Align Two Point Clouds with 3DMatch](#quick-start-demo-align-two-point-clouds-with-3dmatch)
 * [Training 3DMatch from RGB-D Reconstructions](#training-3dmatch-from-rgb-d-reconstructions)
 * [Multi-Frame Depth TSDF Fusion](#multi-frame-depth-tsdf-fusion)
 * [Evaluation Code](#evaluation-code)
 
-## A Quick Start: Align Two Point Clouds with 3DMatch
+## Quick Start Demo: Align Two Point Clouds with 3DMatch
 
 See folder `core`
 
@@ -67,7 +67,7 @@ A brief demo to show how to align two 3D point clouds (projected from single-vie
 5. Run in terminal `./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2` to do the same for the second example 3D point cloud
 6. In Matlab, run `demo.m` to load the keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds. The alignment result is saved as the file `result.ply` which can be viewed with Meshlab or any other 3D viewer.
 
-Note: there is a small chance that alignment will fail on the first try of this demo due to bad keypoints (which are selected randomly).
+Note: there is a small chance that alignment may fail on the first try of this demo due to bad keypoints, which are selected at random.
 
 ## Training 3DMatch from RGB-D Reconstructions
 
@@ -106,7 +106,7 @@ CUDA/C++ code to fuse multiple registered depth maps into a TSDF voxel volume ([
 
 ### Demo
 
-Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/fragment-1-rgbd-frames` into a TSDF voxel volume, and creates a surface point cloud `tsdf.ply`
+Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgbd-frames` into a TSDF voxel volume, and creates a surface point cloud `tsdf.ply`
 
 1. Navigate to directory `depth-fusion/`
 2. Run in terminal `./compile.sh` to compile the demo code `demo.cu`

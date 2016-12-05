@@ -75,9 +75,9 @@ int main(int argc, char * argv[]) {
   std::string cam_K_file = "../data/sample/depth-fusion-demo/camera-intrinsics.txt";
 
   // Location of folder containing RGB-D frames and camera pose files
-  std::string data_path = "../data/sample/depth-fusion-demo/fragment-1-rgbd-frames";
-  int base_frame_idx = 935;
-  int first_frame_idx = 935;
+  std::string data_path = "../data/sample/depth-fusion-demo/rgbd-frames";
+  int base_frame_idx = 8;
+  int first_frame_idx = 8;
   float num_frames = 50;
 
   float cam_K[3 * 3];
@@ -89,10 +89,10 @@ int main(int argc, char * argv[]) {
   float depth_im[im_height * im_width];
 
   // Voxel grid parameters (change these to change voxel grid resolution, etc.)
-  float voxel_grid_origin_x = -2.5f; // Location of voxel grid origin in base frame camera coordinates
-  float voxel_grid_origin_y = -2.5f;
-  float voxel_grid_origin_z = 0.0f;
-  float voxel_size = 0.01f;
+  float voxel_grid_origin_x = -1.5f; // Location of voxel grid origin in base frame camera coordinates
+  float voxel_grid_origin_y = -1.5f;
+  float voxel_grid_origin_z = 0.5f;
+  float voxel_size = 0.006f;
   float trunc_margin = voxel_size * 5;
   int voxel_grid_dim_x = 500;
   int voxel_grid_dim_y = 500;
