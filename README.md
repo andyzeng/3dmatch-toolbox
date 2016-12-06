@@ -128,7 +128,7 @@ Code and models used to perform the experiments in our paper.
 
 
 
-
+Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF. See `deprecated/pointCloud2AccTDF.m`
 
 
 
