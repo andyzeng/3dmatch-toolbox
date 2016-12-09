@@ -121,15 +121,26 @@ Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgb
 
 See folder `evaluation`
 
-Code and models used to perform the experiments in our paper.
+Reference implementation for the experiments in our paper.
 
-### Geometric Registration (of Fused Scene Fragments)
+### Keypoint Matching Benchmark
 
+### Geometric Registration Benchmark
 
+See `evaluation/geometric-registration`
 
+Includes Matlab/C++/CUDA code to run evaluation on the geometric registration benchmarks described [here](). To generate intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments, see `getKeyptsAndDesc.m` or download our pre-computed data [here](). To use intermediate data and run RANSAC-based registration for every pair of fragments, see `runFragmentRegistration.m`. To compute precision and recall from .log files for evaluation, see the example script `evaluate.m`. 
 
 Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF. See `deprecated/pointCloud2AccTDF.m`
 
+### Model Fitting for 6D Object Pose Estimation
 
+See `evaluation/model-fitting-apc`
+
+Includes code, pre-trained model, and pre-computed data to evaluate 3DMatch for model fitting on the Shelf & Tote dataset (Amazon Picking Challenge setting). 
+
+### Mesh Correspondence in Shape2Pose
+
+Includes code to generate mesh correspondence visualizations on the meshes from Shape2Pose.
 
 

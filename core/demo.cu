@@ -234,7 +234,7 @@ int main(int argc, char * argv[]) {
   }
 
   // Save keypoints as binary file (Nx3 float array, row-major order)
-  std::cout << "Saving keypoints to disk (keypoints.bin)..." << std::endl;
+  std::cout << "Saving keypoints to disk (keypts.bin)..." << std::endl;
   std::string keypts_saveto_path = out_prefix_filename + ".keypts.bin";
   std::ofstream keypts_out_file(keypts_saveto_path, std::ios::binary | std::ios::out);
   float num_keyptsf = (float) num_keypts;
