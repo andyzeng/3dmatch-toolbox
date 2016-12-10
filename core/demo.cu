@@ -177,9 +177,7 @@ int main(int argc, char * argv[]) {
   // Start Marvin network
   marvin::Net convnet("3dmatch-net-test.json");
   convnet.Malloc(marvin::Testing);
-  convnet.loadWeights("3dmatch-weights.marvin");
-  // convnet.loadWeights("3dmatch_train_snapshot_15000.marvin");
-  // convnet.loadWeights("train_7scenes_iclnuim_snapshot_3000.marvin");
+  convnet.loadWeights("3dmatch-weights-snapshot-137000.marvin");
   marvin::Response * rData;
   marvin::Response * rFeat;
   rData = convnet.getResponse("data");

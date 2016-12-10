@@ -32,6 +32,13 @@ All relevant information and downloads can be found [here](http://3dmatch.cs.pri
 #### Contact
 If you have any questions or find any bugs, please let me know: [Andy Zeng](http://www.cs.princeton.edu/~andyz/) andyz[at]princeton[dot]edu
 
+## Table of Contents
+* [Dependencies](#dependencies)
+* [Quick Start Demo: Align Two Point Clouds with 3DMatch](#quick-start-demo-align-two-point-clouds-with-3dmatch)
+* [Training 3DMatch from RGB-D Reconstructions](#training-3dmatch-from-rgb-d-reconstructions)
+* [Multi-Frame Depth TSDF Fusion](#multi-frame-depth-tsdf-fusion)
+* [Evaluation Code](#evaluation-code)
+
 ## Dependencies
 
 Our reference implementation of 3DMatch, as well as other components in this toolbox, require the following dependencies. Tested on Ubuntu 14.04.
@@ -52,12 +59,6 @@ Our reference implementation of 3DMatch, as well as other components in this too
  * Used for reading image files
 
 3. Matlab 2015b or higher (tested with Matlab 2016a)
-
-## Table of Contents
-* [Quick Start Demo: Align Two Point Clouds with 3DMatch](#quick-start-demo-align-two-point-clouds-with-3dmatch)
-* [Training 3DMatch from RGB-D Reconstructions](#training-3dmatch-from-rgb-d-reconstructions)
-* [Multi-Frame Depth TSDF Fusion](#multi-frame-depth-tsdf-fusion)
-* [Evaluation Code](#evaluation-code)
 
 ## Quick Start Demo: Align Two Point Clouds with 3DMatch
 
@@ -117,7 +118,7 @@ Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgb
 2. Run in terminal `./compile.sh` to compile the demo code `demo.cu`
 3. Run in terminal `./demo`
 
-## Evaluation Code
+## Evaluation
 
 See folder `evaluation`
 
@@ -127,7 +128,7 @@ Reference implementation for the experiments in our paper.
 
 ### Geometric Registration Benchmark
 
-See `evaluation/geometric-registration`
+See folder `evaluation/geometric-registration`
 
 Includes Matlab code to run evaluation on the geometric registration benchmarks described [here](). Overview:
 * `getKeyptsAndDesc.m` - generates intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments. You can also download our pre-computed data [here](). 
@@ -135,22 +136,18 @@ Includes Matlab code to run evaluation on the geometric registration benchmarks 
 * `writeLog` - read registration results from every pair of fragments and create a .log file
 * `evaluate.m` - compute precision and recall from .log files for evaluation
 
-Quick start: start Matlab and run script `evaluation/geometric-registration/evaluate.m`
+Quick start: run Matlab script `evaluation/geometric-registration/evaluate.m`
 
-Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF. See `deprecated/pointCloud2AccTDF.m`
+Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF (see `deprecated/pointCloud2AccTDF.m`) 3DMatch weights fine-tuned on training fragments can be downloaded [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/weights/3dmatch-weights-snapshot-127000-fragments-6000.marvin).
 
 ### Model Fitting for 6D Object Pose Estimation in the Amazon Picking Challenge
 
-See `evaluation/model-fitting-apc`
+See folder `evaluation/model-fitting-apc`
 
-Includes code and pre-trained models to evaluate 3DMatch for model fitting on the Shelf & Tote dataset. 
-
-Quick start: start Matlab and run script `evaluation/model-fitting-apc/getError.m`
+Includes code and pre-trained models to evaluate 3DMatch for model fitting on the Shelf & Tote dataset. For an evaluation example, run Matlab script `evaluation/model-fitting-apc/getError.m`
 
 ### Mesh Correspondence in Shape2Pose
 
-Includes code to generate mesh correspondence visualizations on the meshes from Shape2Pose.
+See folder `evaluation/mesh-correspondence-shape2pose`
 
-Quick start: 
-
-
+Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php). You can download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `evaluation/mesh-correspondence-shape2pose/keypointRetrieval.m`.

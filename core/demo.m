@@ -75,6 +75,7 @@ fprintf('Estimated surface overlap: %.1f%%\n',ratioAligned*100);
 
 % Visualize alignment results
 pcwrite(pointCloud([fragment2Points';fragment1Points'],'Color',[repmat(uint8([0,0,255]),size(fragment2Points,2),1);repmat(uint8([255,0,0]),size(fragment1Points,2),1)]),'result','PLYformat','binary');
+figure(); pcshow(pointCloud([fragment2Points';fragment1Points'],'Color',[repmat(uint8([0,0,255]),size(fragment2Points,2),1);repmat(uint8([255,0,0]),size(fragment1Points,2),1)]));
 fprintf('Generated visualization of alignment! See results in result.ply\n');
 
 %% Code snippet to generate point cloud from single depth map

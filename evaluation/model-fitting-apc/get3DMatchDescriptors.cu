@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
     // Start Marvin network
 	marvin::Net convnet("tmp.json");
 	convnet.Malloc(marvin::Testing);
-	convnet.loadWeights("3dmatch-weights-apc.marvin");
+	convnet.loadWeights("3dmatch-weights-snapshot-127000-apc-16000.marvin");
 	marvin::Response * rData;
 	marvin::Response * rFeat;
 	rData = convnet.getResponse("data");
