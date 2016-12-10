@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
 
   // Compute random surface keypoints in point cloud coordinates and voxel grid coordinates
   std::cout << "Finding random surface keypoints..." << std::endl;
-  int num_keypts = 50 * 100;
+  int num_keypts = 50 * 10;
   float * keypts = new float[num_keypts * 3];
   float * keypts_grid = new float[num_keypts * 3];
   for (int keypt_idx = 0; keypt_idx < num_keypts; ++keypt_idx) {

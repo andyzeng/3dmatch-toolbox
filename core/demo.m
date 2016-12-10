@@ -57,7 +57,7 @@ fragment2MatchKeypoints = fragment2Keypoints(fragment2MatchIdx,:);
 fragment1MatchKeypoints = fragment1Keypoints(fragment2NNIdx(fragment2MatchIdx),:);
 
 % Estimate rigid transformation with RANSAC to align fragment 2 to fragment 1
-fprintf('Running RANSAC to estimate rigid transformation...');
+fprintf('Running RANSAC to estimate rigid transformation...\n');
 [estimateRt,inlierIdx] = ransacfitRt([fragment1MatchKeypoints';fragment2MatchKeypoints'], 0.05, 0);
 estimateRt = [estimateRt;[0,0,0,1]];
 fprintf('Estimated rigid transformation to align fragment 2 to fragment 1:\n');
@@ -90,7 +90,7 @@ fprintf('Generated visualization of alignment! See results in result.ply\n');
 % camPts = [camX(validDepth),camY(validDepth),camZ(validDepth)]';
 % pcwrite(pointCloud(single(camPts')),'single-depth-1','PLYFormat','binary');
 % 
-% depth = imread('/home/andyz/3dmatch/legacy/data/test/7-scenes-redkitchen/seq-06/frame-000270.depth.png');
+% depth = imread('/home/andyz/3dmatch/legacy/data/test/7-scenes-redkitchen/seq-05/frame-000156.depth.png');
 % depth = double(depth)./1000;
 % K = [585,0,320;0,585,240;0,0,1];
 % [pixX,pixY] = meshgrid(1:640,1:480);
