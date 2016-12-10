@@ -10,6 +10,7 @@
 % this file (or any portion of it) in your project.
 % ---------------------------------------------------------
 
+% Configuration options (change me)
 descriptorName = '3dmatch';
 dataPath = '../../data/fragments'; % Location of scene files
 intermPath = '../../data/fragments/intermediate-files'; % Location of intermediate files holding keypoints and descriptor vectors

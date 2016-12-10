@@ -1,4 +1,15 @@
 function [estimateRt,numInliers,inlierRatio,ratioAligned] = register2Fragments(scenePath,intermPath,fragment1Name,fragment2Name,descriptorName)
+% Run RANSAC-based pose estimation between two sets of 3D keypoints and
+% their 3DMatch descriptors (of scene fragments)
+%
+% ---------------------------------------------------------
+% Copyright (c) 2016, Andy Zeng
+% 
+% This file is part of the 3DMatch Toolbox and is available 
+% under the terms of the Simplified BSD License provided in 
+% LICENSE. Please retain this notice and LICENSE if you use 
+% this file (or any portion of it) in your project.
+% ---------------------------------------------------------
 
 % Load fragment point clouds
 fragment1PointCloud = pcread(fullfile(scenePath,sprintf('%s.ply',fragment1Name)));

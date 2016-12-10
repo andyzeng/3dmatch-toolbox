@@ -38,15 +38,15 @@ Our reference implementation of 3DMatch, as well as other components in this too
 
 1. [CUDA 7.5](https://developer.nvidia.com/cuda-downloads) and [cuDNN 5](https://developer.nvidia.com/cudnn). You may need to register with NVIDIA. Below are some additional steps to set up cuDNN 5. **NOTE** We highly recommend that you install different versions of cuDNN to different directories (e.g., ```/usr/local/cudnn/vXX```) because different software packages may require different versions.
 
-```shell
-LIB_DIR=lib$([[ $(uname) == "Linux" ]] && echo 64)
-CUDNN_LIB_DIR=/usr/local/cudnn/v5/$LIB_DIR
-echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDNN_LIB_DIR >> ~/.profile && ~/.profile
+	```shell
+	LIB_DIR=lib$([[ $(uname) == "Linux" ]] && echo 64)
+	CUDNN_LIB_DIR=/usr/local/cudnn/v5/$LIB_DIR
+	echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDNN_LIB_DIR >> ~/.profile && ~/.profile
 
-tar zxvf cudnn*.tgz
-sudo cp cuda/$LIB_DIR/* $CUDNN_LIB_DIR/
-sudo cp cuda/include/* /usr/local/cudnn/v5/include/
-```
+	tar zxvf cudnn*.tgz
+	sudo cp cuda/$LIB_DIR/* $CUDNN_LIB_DIR/
+	sudo cp cuda/include/* /usr/local/cudnn/v5/include/
+	```
 
 2. OpenCV (tested with OpenCV 2.4.11)
  * Used for reading image files
@@ -129,18 +129,28 @@ Reference implementation for the experiments in our paper.
 
 See `evaluation/geometric-registration`
 
-Includes Matlab/C++/CUDA code to run evaluation on the geometric registration benchmarks described [here](). To generate intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments, see `getKeyptsAndDesc.m` or download our pre-computed data [here](). To use intermediate data and run RANSAC-based registration for every pair of fragments, see `runFragmentRegistration.m`. To compute precision and recall from .log files for evaluation, see the example script `evaluate.m`. 
+Includes Matlab code to run evaluation on the geometric registration benchmarks described [here](). Overview:
+* `getKeyptsAndDesc.m` - generates intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments. You can also download our pre-computed data [here](). 
+* `runFragmentRegistration.m` - read intermediate data and run RANSAC-based registration for every pair of fragments. 
+* `writeLog` - read registration results from every pair of fragments and create a .log file
+* `evaluate.m` - compute precision and recall from .log files for evaluation
+
+Quick start: start Matlab and run script `evaluation/geometric-registration/evaluate.m`
 
 Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF. See `deprecated/pointCloud2AccTDF.m`
 
-### Model Fitting for 6D Object Pose Estimation
+### Model Fitting for 6D Object Pose Estimation in the Amazon Picking Challenge
 
 See `evaluation/model-fitting-apc`
 
-Includes code, pre-trained model, and pre-computed data to evaluate 3DMatch for model fitting on the Shelf & Tote dataset (Amazon Picking Challenge setting). 
+Includes code and pre-trained models to evaluate 3DMatch for model fitting on the Shelf & Tote dataset. 
+
+Quick start: start Matlab and run script `evaluation/model-fitting-apc/getError.m`
 
 ### Mesh Correspondence in Shape2Pose
 
 Includes code to generate mesh correspondence visualizations on the meshes from Shape2Pose.
+
+Quick start: 
 
 

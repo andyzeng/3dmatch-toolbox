@@ -1,4 +1,5 @@
-clear all;
+% Demo script to run RANSAC-based rigid transform estimation between two
+% sets of 3D keypoints and their 3DMatch descriptors
 
 % Add dependencies (for RANSAC-based rigid transform estimation)
 addpath(genpath('external'));

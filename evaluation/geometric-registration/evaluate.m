@@ -1,17 +1,8 @@
-% Script to evaluate .log files for the real-world geometric registration
-% benchmark, in the same spirit as Choi et al 2015. Please see:
+% Script to evaluate .log files for the geometric registration benchmarks,
+% in the same spirit as Choi et al 2015. Please see:
 %
 % http://redwood-data.org/indoor/regbasic.html
 % https://github.com/qianyizh/ElasticReconstruction/tree/master/Matlab_Toolbox
-%
-% ---------------------------------------------------------
-% Copyright (c) 2016, Andy Zeng
-% 
-% This file is part of the 3DMatch Toolbox and is available 
-% under the terms of the Simplified BSD License provided in 
-% LICENSE. Please retain this notice and LICENSE if you use 
-% this file (or any portion of it) in your project.
-% ---------------------------------------------------------
 
 % Locations of evaluation files
 sceneList = {'../../data/fragments/iclnuim-livingroom1-evaluation' ...
