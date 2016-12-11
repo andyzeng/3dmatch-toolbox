@@ -1,13 +1,13 @@
 # 3DMatch Toolbox
 3DMatch is a ConvNet-based local geometric feature descriptor that operates on 3D data (i.e. point clouds, depth maps, meshes, etc.). This toolbox provides code to use 3DMatch for geometric registration and keypoint matching, as well as code to train 3DMatch from existing RGB-D reconstructions. This is the reference implementation of our paper:
 
-### 3DMatch: Learning Local Geometric Descriptors from 3D Reconstructions ([pdf](), [arxiv](), [webpage](http://3dmatch.cs.princeton.edu/))
+### 3DMatch: Learning Local Geometric Descriptors from 3D Reconstructions ([pdf](), [webpage](http://3dmatch.cs.princeton.edu/))
 
 *Andy Zeng, Shuran Song, Matthias Nießner, Matthew Fisher, Jianxiong Xiao, and Thomas Funkhouser*
 
 Matching local geometric features on real-world depth images is a challenging task due to the noisy, low-resolution, and incomplete nature of 3D scan data. These difficulties limit the performance of current state-of-art methods, which are typically based on histograms over geometric properties. In this paper, we present 3DMatch, a data-driven model that learns a local volumetric patch descriptor for establishing correspondences between partial 3D data. To amass training data for our model, we propose an unsupervised feature learning method that leverages the millions of correspondence labels found in existing RGB-D reconstructions. Experiments show that our descriptor is not only able to match local geometry in new scenes for reconstruction, but also generalize to different tasks and spatial scales (e.g. instance-level object model alignment for the Amazon Picking Challenge, and mesh surface correspondence). Results show that 3DMatch consistently outperforms other state-of-the-art approaches by a significant margin. 
 
-![Teaser](teaser.png?raw=true)
+![Overview](overview.jpg?raw=true)
 
 #### Citing
 
@@ -65,6 +65,8 @@ Our reference implementation of 3DMatch, as well as other components in this too
 See folder `core`
 
 A brief demo to show how to align two 3D point clouds (projected from single-view depth maps) using the 3DMatch descriptor (with Marvin) and standard RANSAC.
+
+![Demo-Teaser](demo-teaser.jpg?raw=true)
 
 1. Navigate to folder `core/`
 2. Run in terminal `./compile.sh` to compile `demo.cu` and Marvin
@@ -153,4 +155,4 @@ Includes code and pre-trained models to evaluate 3DMatch for model fitting on th
 
 See folder `evaluation/mesh-correspondence-shape2pose`
 
-Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php). You can download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `evaluation/mesh-correspondence-shape2pose/keypointRetrieval.m`.
+Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php) using 3DMatch. You can also download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `evaluation/mesh-correspondence-shape2pose/keypointRetrieval.m`.
