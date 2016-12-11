@@ -71,9 +71,9 @@ A brief demo to show how to align two 3D point clouds (projected from single-vie
 3. Run bash script `./download-weights.sh` to download our 3DMatch pre-trained weights
 4. Run in terminal `./demo ../data/sample/3dmatch-demo/single-depth-1.ply fragment-1` to load the first example 3D point cloud and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk)
 5. Run in terminal `./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2` to do the same for the second example 3D point cloud
-6. In Matlab, run `demo.m` to load the keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds. The alignment result is saved as the file `result.ply` which can be viewed with Meshlab or any other 3D viewer.
+6. In Matlab, run `demo.m` to load the keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds. The aligned point clouds are saved into the file `result.ply` which can be viewed with Meshlab or any other 3D viewer.
 
-Note: there is a small chance that alignment may fail on the first try of this demo due to bad keypoints, which are selected at random.
+Note: there is a chance that alignment may fail on the first try of this demo due to bad keypoints, which are selected randomly by default.
 
 ## Training 3DMatch from RGB-D Reconstructions
 
@@ -85,6 +85,9 @@ Code for training 3DMatch with [Marvin](http://marvin.is/), a lightweight GPU-on
 Download one or more scenes from RGB-D reconstruction datasets on our [project webpage](http://3dmatch.cs.princeton.edu/). These datasets have been converted into a unified format, which is compatible with our Marvin data layer used to train 3DMatch. Save at least one scene into `data/train` and another scene into `data/test` such that the folder hierarchy looks something like this:
 ```shell
 |——— training
+     |——— core
+          |——— marvin.hpp
+          |——— ...
 |——— data
      |——— train
           |——— rgbd-dataset-scene-1
@@ -99,10 +102,10 @@ Download one or more scenes from RGB-D reconstruction datasets on our [project w
                |——— camera-intrinsics.txt
                |——— ...
 ```
-2. Navigate to directory `training/`
-3. Run in terminal `./compile.sh` to compile Marvin
-4. Run in terminal `./marvin train net.json` to train a 3DMatch model from scratch over correspondences from the RGB-D scenes saved in `data/train`
-5. To train 3DMatch using pre-trained weights from a Marvin tensor file, run in terminal `./marvin train net.json pre-trained-weights.marvin`
+1. Navigate to directory `training/`
+2. Run in terminal `./compile.sh` to compile Marvin
+3. Run in terminal `./marvin train net.json` to train a 3DMatch model from scratch over correspondences from the RGB-D scenes saved in `data/train`
+4. To train 3DMatch using pre-trained weights from a Marvin tensor file, run in terminal `./marvin train net.json pre-trained-weights.marvin`
 
 ## Multi-Frame Depth TSDF Fusion
 
@@ -138,7 +141,7 @@ Includes Matlab code to run evaluation on the geometric registration benchmarks 
 
 Quick start: run Matlab script `evaluation/geometric-registration/evaluate.m`
 
-Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF (see `deprecated/pointCloud2AccTDF.m`) 3DMatch weights fine-tuned on training fragments can be downloaded [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/weights/3dmatch-weights-snapshot-127000-fragments-6000.marvin).
+Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF (see `deprecated/pointCloud2AccTDF.m`). 3DMatch pre-trained weights fine-tuned on training fragments can be downloaded [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/weights/3dmatch-weights-snapshot-127000-fragments-6000.marvin).
 
 ### Model Fitting for 6D Object Pose Estimation in the Amazon Picking Challenge
 
