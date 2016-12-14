@@ -62,11 +62,11 @@ Our reference implementation of 3DMatch, as well as other components in this too
 
 ## Quick Start Demo: Align Two Point Clouds with 3DMatch
 
+![Demo-Teaser](demo-teaser.jpg?raw=true)
+
 See folder `core`
 
 A brief demo to show how to align two 3D point clouds (projected from single-view depth maps) using the 3DMatch descriptor (with Marvin) and standard RANSAC.
-
-![Demo-Teaser](demo-teaser.jpg?raw=true)
 
 1. Navigate to folder `core/`
 2. Run in terminal `./compile.sh` to compile `demo.cu` and Marvin
@@ -130,6 +130,10 @@ See folder `evaluation`
 Reference implementation for the experiments in our paper.
 
 ### Keypoint Matching Benchmark
+
+See folder `evaluation/keypoint-matching`
+
+Includes Matlab code to generate a correspondence dataset from the RGB-D reconstructions [here](), as well as code to run evaluation on the keypoint matching benchmarks described [here](). Overview:
 
 ### Geometric Registration Benchmark
 
