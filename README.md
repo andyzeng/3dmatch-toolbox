@@ -68,21 +68,28 @@ See folder `core`
 This demo aligns two 3D point clouds (projected from single-view depth maps) using the 3DMatch descriptor (with Marvin) and standard RANSAC.
 
 0. Checkout 3DMatch toolbox, compile demo code and Marvin
+
 	```shell
 	git clone https://github.com/andyzeng/3dmatch-toolbox.git 3dmatch-toolbox
 	cd 3dmatch-toolbox/core
 	./compile.sh
 	```
+
 0. Download our 3DMatch pre-trained weights
+
 	```shell
 	./download-weights.sh
 	```
+
 0. Load the two example 3D point clouds and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk)
+
 	```shell
 	./demo ../data/sample/3dmatch-demo/single-depth-1.ply fragment-1 # creates fragment-1.desc.3dmatch.bin and fragment-1.keypts.bin
 	./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2 # creates fragment-2.desc.3dmatch.bin and fragment-2.keypts.bin
 	```
+
 0. Run the following script in Matlab:
+
 	```matlab
 	% Load keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds
 	% The aligned point clouds are saved into the file `result.ply` which can be viewed with Meshlab or any other 3D viewer
