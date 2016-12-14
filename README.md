@@ -63,11 +63,11 @@ Our reference implementation of 3DMatch, as well as other components in this too
 
 ![Demo-Teaser](demo-teaser.jpg?raw=true)
 
-See folder `core`
+This demo aligns two 3D point clouds (projected from single-view depth maps) using our pre-trained 3DMatch descriptor (with Marvin) and standard RANSAC.
 
-This demo aligns two 3D point clouds (projected from single-view depth maps) using the 3DMatch descriptor (with Marvin) and standard RANSAC.
+### Instructions
 
-0. Checkout 3DMatch toolbox, compile demo code and Marvin
+0. Checkout 3DMatch toolbox, compile C++/CUDA demo code and Marvin
 
 	```shell
 	git clone https://github.com/andyzeng/3dmatch-toolbox.git 3dmatch-toolbox
@@ -78,60 +78,102 @@ This demo aligns two 3D point clouds (projected from single-view depth maps) usi
 0. Download our 3DMatch pre-trained weights
 
 	```shell
-	./download-weights.sh
+	./download-weights.sh # 3dmatch-weights-snapshot-137000.marvin
 	```
 
 0. Load the two example 3D point clouds and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk)
 
 	```shell
-	./demo ../data/sample/3dmatch-demo/single-depth-1.ply fragment-1 # creates fragment-1.desc.3dmatch.bin and fragment-1.keypts.bin
-	./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2 # creates fragment-2.desc.3dmatch.bin and fragment-2.keypts.bin
+	# Generate fragment-1.desc.3dmatch.bin and fragment-1.keypts.bin
+	./demo ../data/sample/3dmatch-demo/single-depth-1.ply fragment-1
+
+	# Generate fragment-2.desc.3dmatch.bin and fragment-2.keypts.bin
+	./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2 
 	```
 
 0. Run the following script in Matlab:
 
 	```matlab
-	% Load keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds
-	% The aligned point clouds are saved into the file `result.ply` which can be viewed with Meshlab or any other 3D viewer
-	% Note: there is a chance that alignment may fail on the first try of this demo due to bad keypoints, which are selected randomly by default.
+	% Load keypoints and 3DMatch descriptors and use RANSAC to register the two
+	% point clouds. A visualization of the aligned point clouds is saved into
+	% the file `result.ply` which can be viewed with Meshlab or any other 3D
+	% viewer. Note: there is a chance that alignment may fail on the first try
+	% of this demo due to bad keypoints, which are selected randomly by default.
 	demo;
 	```
 
 ## Training 3DMatch from RGB-D Reconstructions
 
-See folder `training`
+See folder `3dmatch-toolbox/training`
 
-Code for training 3DMatch with [Marvin](http://marvin.is/), a lightweight GPU-only neural network framework. Includes Siamese network architecture .json file `training/net.json` and a CUDA/C++ Marvin data layer in `training/match.hpp` that randomly samples correspondences from RGB-D reconstruction datasets (which can be downloaded from our [project webpage](http://3dmatch.cs.princeton.edu/)).
+Code for training 3DMatch with [Marvin](http://marvin.is/), a lightweight GPU-only neural network framework. Includes Siamese network architecture .json file `training/net.json` and a CUDA/C++ Marvin data layer in `training/match.hpp` that randomly samples correspondences from RGB-D reconstruction datasets (which can be downloaded from our [project webpage](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets)).
 
-### Setup Instructions
-Download one or more scenes from RGB-D reconstruction datasets on our [project webpage](http://3dmatch.cs.princeton.edu/). These datasets have been converted into a unified format, which is compatible with our Marvin data layer used to train 3DMatch. Save at least one scene into `data/train` and another scene into `data/test` such that the folder hierarchy looks something like this:
-```shell
-|——— training
-     |——— core
-          |——— marvin.hpp
-          |——— ...
-|——— data
-     |——— train
-          |——— rgbd-dataset-scene-1
-               |——— seq-01
-               |——— seq-02
-               |——— camera-intrinsics.txt
-               |——— ...
-          |——— ...
-     |——— test
-          |——— rgbd-dataset-scene-2
-               |——— seq-01
-               |——— camera-intrinsics.txt
-               |——— ...
-```
-0. Navigate to directory `training/`
-0. Run in terminal `./compile.sh` to compile Marvin
-0. Run in terminal `./marvin train net.json` to train a 3DMatch model from scratch over correspondences from the RGB-D scenes saved in `data/train`
-0. To train 3DMatch using pre-trained weights from a Marvin tensor file, run in terminal `./marvin train net.json pre-trained-weights.marvin`
+### Additional Setup Instructions
+0. Download one or more scenes from RGB-D reconstruction datasets on our [project webpage](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets). These datasets have been converted into a unified format, which is compatible with our Marvin data layer used to train 3DMatch. Save at least one scene into `data/train` and another scene into `data/test` such that the folder hierarchy looks something like this:
+
+	```shell
+	|——— training
+	     |——— core
+	          |——— marvin.hpp
+	          |——— ...
+	|——— data
+	     |——— train
+	          |——— rgbd-dataset-scene-1
+	               |——— seq-01
+	               |——— seq-02
+	               |——— camera-intrinsics.txt
+	               |——— ...
+	          |——— ...
+	     |——— test
+	          |——— rgbd-dataset-scene-2
+	               |——— seq-01
+	               |——— camera-intrinsics.txt
+	               |——— ...
+	```
+
+### Quick Start
+0. Compile Marvin
+	
+	```shell
+	cd 3dmatch-toolbox/training
+	./compile.sh
+	```
+
+0. Download several training and testing scenes from RGB-D reconstruction datasets (download more scenes [here](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets))
+
+	```shell
+	cd ../data
+	mkdir train && mkdir test && mkdir backup
+	cd train
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-brown_cogsci_1-brown_cogsci_1.zip
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/7-scenes-heads.zip
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-harvard_c11-hv_c11_2.zip
+	unzip sun3d-brown_cogsci_1-brown_cogsci_1.zip
+	unzip 7-scenes-heads.zip
+	unzip sun3d-harvard_c11-hv_c11_2.zip
+	mv *.zip ../backup
+	cd ../test
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-hotel_umd-maryland_hotel3.zip
+	unzip sun3d-hotel_umd-maryland_hotel3.zip
+	mv *.zip ../backup
+	cd ../../training
+	```
+
+0. Train a 3DMatch model from scratch over correspondences from the RGB-D scenes saved in `data/train`
+
+	```shell
+	./marvin train net.json
+	```
+
+0. (Optional) Train 3DMatch using pre-trained weights from a Marvin tensor file
+
+	```shell
+	./marvin train net.json your-pre-trained-weights.marvin
+	```
 
 ## Multi-Frame Depth TSDF Fusion
 
-See folder `depth-fusion`
+See folder `3dmatch-toolbox/depth-fusion`
 
 CUDA/C++ code to fuse multiple registered depth maps into a TSDF voxel volume ([Curless and Levoy 1996](http://graphics.stanford.edu/papers/volrange/volrange.pdf)), which can then be used to create surface meshes and point clouds.
 
@@ -139,44 +181,62 @@ CUDA/C++ code to fuse multiple registered depth maps into a TSDF voxel volume ([
 
 Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgbd-frames` into a TSDF voxel volume, and creates a surface point cloud `tsdf.ply`
 
-0. Navigate to directory `depth-fusion/`
-0. Run in terminal `./compile.sh` to compile the demo code `demo.cu`
-0. Run in terminal `./demo`
+```shell
+cd 3dmatch-toolbox/depth-fusion
+./compile.sh
+./demo # output saved to tsdf.ply
+```
 
-## Evaluation
+## Evaluation Code
 
-See folder `evaluation`
+See folder `3dmatch-toolbox/evaluation`
 
-Reference implementation for the experiments in our paper.
+Evaluation code for our [Keypoint Matching Benchmark](http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark) and [Geometric Registration Benchmark](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark), as well as the reference implementation for the experiments in our [paper](https://arxiv.org/abs/1603.08182).
 
 ### Keypoint Matching Benchmark
 
-See folder `evaluation/keypoint-matching`
+See folder `3dmatch-toolbox/evaluation/keypoint-matching`
 
 Includes Matlab code to generate a correspondence dataset from the RGB-D reconstructions [here](), as well as code to run evaluation on the keypoint matching benchmarks described [here](). Overview:
 
+#### Quick Start
+
+Run the following in Matlab:
+
+```matlab
+% Evaluate 3DMatch on the keypoint matching benchmark
+evaluate;
+```
+
 ### Geometric Registration Benchmark
 
-See folder `evaluation/geometric-registration`
+See folder `3dmatch-toolbox/evaluation/geometric-registration`
 
-Includes Matlab code to run evaluation on the geometric registration benchmarks described [here](). Overview:
+Includes Matlab code to run evaluation on the geometric registration benchmarks described [here](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark). Overview:
 * `getKeyptsAndDesc.m` - generates intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments. You can also download our pre-computed data [here](). 
 * `runFragmentRegistration.m` - read intermediate data and run RANSAC-based registration for every pair of fragments. 
 * `writeLog` - read registration results from every pair of fragments and create a .log file
 * `evaluate.m` - compute precision and recall from .log files for evaluation
 
-Quick start: run Matlab script `evaluation/geometric-registration/evaluate.m`
+#### Quick Start
+
+Run the following in Matlab:
+
+```matlab
+% Evaluate 3DMatch on the geometric registration benchmark
+evaluate;
+```
 
 Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF (see `deprecated/pointCloud2AccTDF.m`). 3DMatch pre-trained weights fine-tuned on training fragments can be downloaded [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/weights/3dmatch-weights-snapshot-127000-fragments-6000.marvin).
 
 ### Model Fitting for 6D Object Pose Estimation in the Amazon Picking Challenge
 
-See folder `evaluation/model-fitting-apc`
+See folder `3dmatch-toolbox/evaluation/model-fitting-apc`
 
-Includes code and pre-trained models to evaluate 3DMatch for model fitting on the Shelf & Tote dataset. For an evaluation example, run Matlab script `evaluation/model-fitting-apc/getError.m`
+Includes code and pre-trained models to evaluate 3DMatch for model fitting on the Shelf & Tote dataset. For an evaluation example, run Matlab script `getError.m`
 
 ### Mesh Correspondence in Shape2Pose
 
-See folder `evaluation/mesh-correspondence-shape2pose`
+See folder `3dmatch-toolbox/evaluation/mesh-correspondence-shape2pose`
 
-Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php) using 3DMatch. You can also download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `evaluation/mesh-correspondence-shape2pose/keypointRetrieval.m`.
+Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php) using 3DMatch. You can also download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `keypointRetrieval.m`.
