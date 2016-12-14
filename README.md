@@ -32,18 +32,11 @@ All relevant information and downloads can be found [here](http://3dmatch.cs.pri
 #### Contact
 If you have any questions or find any bugs, please let me know: [Andy Zeng](http://www.cs.princeton.edu/~andyz/) andyz[at]princeton[dot]edu
 
-## Table of Contents
-* [Dependencies](#dependencies)
-* [Quick Start Demo: Align Two Point Clouds with 3DMatch](#quick-start-demo-align-two-point-clouds-with-3dmatch)
-* [Training 3DMatch from RGB-D Reconstructions](#training-3dmatch-from-rgb-d-reconstructions)
-* [Multi-Frame Depth TSDF Fusion](#multi-frame-depth-tsdf-fusion)
-* [Evaluation Code](#evaluation-code)
-
 ## Dependencies
 
 Our reference implementation of 3DMatch, as well as other components in this toolbox, require the following dependencies. Tested on Ubuntu 14.04.
 
-1. [CUDA 7.5](https://developer.nvidia.com/cuda-downloads) and [cuDNN 5](https://developer.nvidia.com/cudnn). You may need to register with NVIDIA. Below are some additional steps to set up cuDNN 5. **NOTE** We highly recommend that you install different versions of cuDNN to different directories (e.g., ```/usr/local/cudnn/vXX```) because different software packages may require different versions.
+0. [CUDA 7.5](https://developer.nvidia.com/cuda-downloads) and [cuDNN 5](https://developer.nvidia.com/cudnn). You may need to register with NVIDIA. Below are some additional steps to set up cuDNN 5. **NOTE** We highly recommend that you install different versions of cuDNN to different directories (e.g., ```/usr/local/cudnn/vXX```) because different software packages may require different versions.
 
 	```shell
 	LIB_DIR=lib$([[ $(uname) == "Linux" ]] && echo 64)
@@ -55,27 +48,47 @@ Our reference implementation of 3DMatch, as well as other components in this too
 	sudo cp cuda/include/* /usr/local/cudnn/v5/include/
 	```
 
-2. OpenCV (tested with OpenCV 2.4.11)
+0. OpenCV (tested with OpenCV 2.4.11)
  * Used for reading image files
 
-3. Matlab 2015b or higher (tested with Matlab 2016a)
+0. Matlab 2015b or higher (tested with Matlab 2016a)
 
-## Quick Start Demo: Align Two Point Clouds with 3DMatch
+## Table of Contents
+* [Demo: Align Two Point Clouds with 3DMatch](#demo-align-two-point-clouds-with-3dmatch)
+* [Training 3DMatch from RGB-D Reconstructions](#training-3dmatch-from-rgb-d-reconstructions)
+* [Multi-Frame Depth TSDF Fusion](#multi-frame-depth-tsdf-fusion)
+* [Evaluation Code](#evaluation-code)
+
+## Demo: Align Two Point Clouds with 3DMatch
 
 ![Demo-Teaser](demo-teaser.jpg?raw=true)
 
 See folder `core`
 
-A brief demo to show how to align two 3D point clouds (projected from single-view depth maps) using the 3DMatch descriptor (with Marvin) and standard RANSAC.
+This demo aligns two 3D point clouds (projected from single-view depth maps) using the 3DMatch descriptor (with Marvin) and standard RANSAC.
 
-1. Navigate to folder `core/`
-2. Run in terminal `./compile.sh` to compile `demo.cu` and Marvin
-3. Run bash script `./download-weights.sh` to download our 3DMatch pre-trained weights
-4. Run in terminal `./demo ../data/sample/3dmatch-demo/single-depth-1.ply fragment-1` to load the first example 3D point cloud and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk)
-5. Run in terminal `./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2` to do the same for the second example 3D point cloud
-6. In Matlab, run `demo.m` to load the keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds. The aligned point clouds are saved into the file `result.ply` which can be viewed with Meshlab or any other 3D viewer.
-
-Note: there is a chance that alignment may fail on the first try of this demo due to bad keypoints, which are selected randomly by default.
+0. Checkout 3DMatch toolbox, compile demo code and Marvin
+	```shell
+	git clone https://github.com/andyzeng/3dmatch-toolbox.git 3dmatch-toolbox
+	cd 3dmatch-toolbox/core
+	./compile.sh
+	```
+0. Download our 3DMatch pre-trained weights
+	```shell
+	./download-weights.sh
+	```
+0. Load the two example 3D point clouds and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk)
+	```shell
+	./demo ../data/sample/3dmatch-demo/single-depth-1.ply fragment-1 # creates fragment-1.desc.3dmatch.bin and fragment-1.keypts.bin
+	./demo ../data/sample/3dmatch-demo/single-depth-2.ply fragment-2 # creates fragment-2.desc.3dmatch.bin and fragment-2.keypts.bin
+	```
+0. Run the following script in Matlab:
+	```matlab
+	% Load keypoints and 3DMatch descriptors and use RANSAC to register the two point clouds
+	% The aligned point clouds are saved into the file `result.ply` which can be viewed with Meshlab or any other 3D viewer
+	% Note: there is a chance that alignment may fail on the first try of this demo due to bad keypoints, which are selected randomly by default.
+	demo;
+	```
 
 ## Training 3DMatch from RGB-D Reconstructions
 
@@ -104,10 +117,10 @@ Download one or more scenes from RGB-D reconstruction datasets on our [project w
                |——— camera-intrinsics.txt
                |——— ...
 ```
-1. Navigate to directory `training/`
-2. Run in terminal `./compile.sh` to compile Marvin
-3. Run in terminal `./marvin train net.json` to train a 3DMatch model from scratch over correspondences from the RGB-D scenes saved in `data/train`
-4. To train 3DMatch using pre-trained weights from a Marvin tensor file, run in terminal `./marvin train net.json pre-trained-weights.marvin`
+0. Navigate to directory `training/`
+0. Run in terminal `./compile.sh` to compile Marvin
+0. Run in terminal `./marvin train net.json` to train a 3DMatch model from scratch over correspondences from the RGB-D scenes saved in `data/train`
+0. To train 3DMatch using pre-trained weights from a Marvin tensor file, run in terminal `./marvin train net.json pre-trained-weights.marvin`
 
 ## Multi-Frame Depth TSDF Fusion
 
@@ -119,9 +132,9 @@ CUDA/C++ code to fuse multiple registered depth maps into a TSDF voxel volume ([
 
 Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgbd-frames` into a TSDF voxel volume, and creates a surface point cloud `tsdf.ply`
 
-1. Navigate to directory `depth-fusion/`
-2. Run in terminal `./compile.sh` to compile the demo code `demo.cu`
-3. Run in terminal `./demo`
+0. Navigate to directory `depth-fusion/`
+0. Run in terminal `./compile.sh` to compile the demo code `demo.cu`
+0. Run in terminal `./demo`
 
 ## Evaluation
 
