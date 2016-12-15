@@ -1,6 +1,12 @@
 function [p1,p2] = getNonMatchPair(sceneDataList,maxTries,voxelGridPatchRadius,voxelSize,voxelMargin)
-%GETMATCHPAIR Summary of this function goes here
-%   Detailed explanation goes here
+% ---------------------------------------------------------
+% Copyright (c) 2016, Andy Zeng
+% 
+% This file is part of the 3DMatch Toolbox and is available 
+% under the terms of the Simplified BSD License provided in 
+% LICENSE. Please retain this notice and LICENSE if you use 
+% this file (or any portion of it) in your project.
+% ---------------------------------------------------------
 
 nonMatchFound = false;
 while ~nonMatchFound
@@ -20,16 +26,11 @@ while ~nonMatchFound
     randDepthInd = randsample(find(depthIm > 0),1);
     [pixY,pixX] = ind2sub(size(depthIm),randDepthInd);
     p1.pixelCoords = [pixX-1,pixY-1];
-%     p1.x = pixX;
-%     p1.y = pixY;
     ptCamZ = depthIm(randDepthInd);
     ptCamX = (pixX-0.5-camK(1,3))*ptCamZ/camK(1,1);
     ptCamY = (pixY-0.5-camK(2,3))*ptCamZ/camK(2,2);
     ptCam = [ptCamX;ptCamY;ptCamZ];
     p1.camCoords = ptCam;
-%     p1.camx = ptCam(1);
-%     p1.camy = ptCam(2);
-%     p1.camz = ptCam(3);
     extCam2World = dlmread(strcat(framePrefix,'.pose.txt'));
     p1World = extCam2World(1:3,1:3)*ptCam + extCam2World(1:3,4);
 
@@ -62,16 +63,11 @@ while ~nonMatchFound
         randDepthInd = randsample(find(depthIm > 0),1);
         [pixY,pixX] = ind2sub(size(depthIm),randDepthInd);
         p2.pixelCoords = [pixX-1,pixY-1];
-%         p2.x = pixX;
-%         p2.y = pixY;
         ptCamZ = depthIm(randDepthInd);
         ptCamX = (pixX-0.5-camK(1,3))*ptCamZ/camK(1,1);
         ptCamY = (pixY-0.5-camK(2,3))*ptCamZ/camK(2,2);
         ptCam = [ptCamX;ptCamY;ptCamZ];
         p2.camCoords = ptCam;
-%         p2.camx = ptCam(1);
-%         p2.camy = ptCam(2);
-%         p2.camz = ptCam(3);
         extCam2World = dlmread(strcat(otherFramePrefix,'.pose.txt'));
         p2World = extCam2World(1:3,1:3)*ptCam + extCam2World(1:3,4);
 

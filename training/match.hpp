@@ -390,7 +390,7 @@ public:
             continue;
 
           // Check that positive correspondence in world coordinates is close enough
-          if (abs(valid_p2_depth[rand_frame_idx] - depth_val_p2) > 0.05)
+          if (abs(valid_p2_depth[rand_frame_idx] - depth_val_p2) > 0.03)
             continue;
 
           break;

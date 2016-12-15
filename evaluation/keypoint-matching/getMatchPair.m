@@ -1,6 +1,12 @@
 function [p1,p2] = getMatchPair(sceneDataList,maxTries,voxelGridPatchRadius,voxelSize,voxelMargin)
-%GETMATCHPAIR Summary of this function goes here
-%   Detailed explanation goes here
+% ---------------------------------------------------------
+% Copyright (c) 2016, Andy Zeng
+% 
+% This file is part of the 3DMatch Toolbox and is available 
+% under the terms of the Simplified BSD License provided in 
+% LICENSE. Please retain this notice and LICENSE if you use 
+% this file (or any portion of it) in your project.
+% ---------------------------------------------------------
 
 corresFound = false;
 while ~corresFound
@@ -20,16 +26,11 @@ while ~corresFound
     randDepthInd = randsample(find(depthIm > 0),1);
     [pixY,pixX] = ind2sub(size(depthIm),randDepthInd);
     p1.pixelCoords = [pixX-1,pixY-1];
-%     p1.x = pixX;
-%     p1.y = pixY;
     ptCamZ = depthIm(randDepthInd);
     ptCamX = (pixX-0.5-camK(1,3))*ptCamZ/camK(1,1);
     ptCamY = (pixY-0.5-camK(2,3))*ptCamZ/camK(2,2);
     ptCam = [ptCamX;ptCamY;ptCamZ];
     p1.camCoords = ptCam;
-%     p1.camx = ptCam(1);
-%     p1.camy = ptCam(2);
-%     p1.camz = ptCam(3);
     extCam2World = dlmread(strcat(framePrefix,'.pose.txt'));
     p1CamLoc = extCam2World(1:3,4);
     p1World = extCam2World(1:3,1:3)*ptCam + extCam2World(1:3,4);
@@ -98,10 +99,7 @@ while ~corresFound
                 bboxPixY = round((bboxCorners(2,:).*camK(2,2)./bboxCorners(3,:))+camK(2,3));
                 bboxPixX = [pixX-max([pixX-bboxPixX,bboxPixX-pixX]),pixX+max([pixX-bboxPixX,bboxPixX-pixX])];
                 bboxPixY = [pixY-max([pixY-bboxPixY,bboxPixY-pixY]),pixY+max([pixY-bboxPixY,bboxPixY-pixY])];
-%                     figure(); imagesc(depthIm); hold on; scatter(pixX,pixY,'g','fill'); hold off;
-%                     for i=1:8
-%                         hold on; scatter(bboxPixX(i),bboxPixY(i),'r','fill'); hold off;
-%                     end
+                
                 if sum(bboxPixX <= 0 | bboxPixX > 640 | bboxPixY <= 0 | bboxPixY > 480) > 0
                     continue;
                 end
@@ -109,12 +107,7 @@ while ~corresFound
 
                 p2.framePath = otherFramePrefix;
                 p2.pixelCoords = [pixX-1,pixY-1];
-%                 p2.x = pixX;
-%                 p2.y = pixY;
                 p2.camCoords = ptCam;
-%                 p2.camx = ptCam(1);
-%                 p2.camy = ptCam(2);
-%                 p2.camz = ptCam(3);
                 p2.camK = camK;
                 corresFound = true;
                 break;

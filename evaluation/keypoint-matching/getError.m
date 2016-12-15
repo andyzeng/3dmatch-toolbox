@@ -3,7 +3,7 @@
 
 % Path to .log files (change me)
 descLogFile = '3dmatch.log'; % List of descriptor distances per comparison
-gtLogFile = 'gt.log';
+gtLogFile = 'validation-set-gt.log'; % Ground truth binary correspondence labels
 
 % Load descriptor distances 
 descDistPred = dlmread(descLogFile);

@@ -1,5 +1,14 @@
-clear all;
-
+% Script to generate a correspondence dataset from RGB-D reconstructions
+% Refer to: http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark
+%
+% ---------------------------------------------------------
+% Copyright (c) 2016, Andy Zeng
+% 
+% This file is part of the 3DMatch Toolbox and is available 
+% under the terms of the Simplified BSD License provided in 
+% LICENSE. Please retain this notice and LICENSE if you use 
+% this file (or any portion of it) in your project.
+% ---------------------------------------------------------
 
 % Path to scene data
 dataPath = '../../data/test';
@@ -12,8 +21,8 @@ testScenes = {'7-scenes-redkitchen', ...
              'sun3d-mit_76_studyroom-76-1studyroom2', ...
              'sun3d-mit_lab_hj-lab_hj_tea_nov_2_2012_scan1_erika'};
 
-% Total number of comparisons in the validation set
-numComparisons = 100000;
+% Total number of comparisons in the correspondence dataset
+numComparisons = 10000;
 
 % Local TDF voxel grid parameters
 voxelGridPatchRadius = 15; % in voxels
@@ -52,10 +61,11 @@ while(size(validationData,1) < numComparisons)
     [p1,p2] = getMatchPair(sceneDataList,maxTries,voxelGridPatchRadius,voxelSize,voxelMargin);
     [p3,p4] = getNonMatchPair(sceneDataList,maxTries,voxelGridPatchRadius,voxelSize,voxelMargin);
     
-%     subplot(2,2,1); imshow(p1.colorPatch);
-%     subplot(2,2,2); imshow(p2.colorPatch);
-%     subplot(2,2,3); imagesc(p1.depthPatch); axis equal; axis tight;
-%     subplot(2,2,4); imagesc(p2.depthPatch); axis equal; axis tight;
+    % Visualize
+    subplot(2,2,1); imshow(p1.colorPatch);
+    subplot(2,2,2); imshow(p2.colorPatch);
+    subplot(2,2,3); imagesc(p1.depthPatch); axis equal; axis tight;
+    subplot(2,2,4); imagesc(p2.depthPatch); axis equal; axis tight;
 
     validationData{sampleIdx,1} = p1;
     validationData{sampleIdx,2} = p2;
@@ -77,23 +87,5 @@ for dataIdx = 1:numComparisons
 end
 
 % Save validation set
-save('validation-set.mat','data','labels');
-dlmwrite('gt.log',[numComparisons;cell2mat(labels)]);
-
-% colorMosaicMatches = [];
-% i = 1;
-% tmpRow = [];
-% for dataIdx = 1:numComparisons
-%     if labels{dataIdx}
-%         
-%         tmpRow = [tmpRow,imresize(data{dataIdx,1}.depthPatch,[64,64]),imresize(data{dataIdx,2}.depthPatch,[64,64])];
-% %         tmpRow = [tmpRow,imresize(data{dataIdx,1}.colorPatch,[64,64]),imresize(data{dataIdx,2}.colorPatch,[64,64])];
-%         i = i + 1;
-%         if i == 16
-%             colorMosaicMatches = [colorMosaicMatches;tmpRow];
-%             i = 1;
-%             tmpRow = [];
-%             imagesc(colorMosaicMatches); axis equal;
-%         end
-%     end
-% end
+save('my-corres-dataset.mat','data','labels');
+dlmwrite('my-corres-dataset-gt.log',[numComparisons;cell2mat(labels)]);
