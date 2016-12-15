@@ -191,22 +191,54 @@ cd 3dmatch-toolbox/depth-fusion
 
 See folder `3dmatch-toolbox/evaluation`
 
-Evaluation code for our [Keypoint Matching Benchmark](http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark) and [Geometric Registration Benchmark](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark), as well as the reference implementation for the experiments in our [paper](https://arxiv.org/abs/1603.08182).
+Evaluation code for the [Keypoint Matching Benchmark](http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark) and [Geometric Registration Benchmark](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark), as well as a reference implementation for additional experiments from our [paper](https://arxiv.org/pdf/1603.08182v2.pdf).
 
 ### Keypoint Matching Benchmark
 
 See folder `3dmatch-toolbox/evaluation/keypoint-matching`
 
-Includes Matlab code to generate a correspondence dataset from the RGB-D reconstructions [here](), as well as code to run evaluation on the keypoint matching benchmarks described [here](). Overview:
+Benchmark description and leaderboard can be found [here](http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark).
 
-#### Quick Start
+#### Evaluation example
 
-Run the following in Matlab:
+0. Run the following in Matlab:
 
-```matlab
-% Evaluate 3DMatch on the keypoint matching benchmark
-evaluate;
-```
+	```matlab
+	%% Evaluate 3DMatch on the validation set (validation-set-gt.log)
+	% Load 3DMatch's .log file and compute false positive rate at 95% recall
+	getError;
+	```
+
+#### Run 3DMatch on the validation set to generate a .log file
+
+
+0. Compile C++/CUDA code to compute 3DMatch descriptors with Marvin
+
+	```shell
+	cd 3dmatch-toolbox/evaluation/keypoint-matching
+	./compile.sh
+	```
+
+0. Download our 3DMatch pre-trained weights 
+
+	```shell
+	./download-weights.sh # 3dmatch-weights-snapshot-137000.marvin
+	```
+
+0. Download the validation set
+
+	```shell
+	./download-validation.sh
+	```
+
+#### Generate your own correspondence dataset from [RGB-D reconstructions](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets)
+
+0. Run the following in Matlab:
+
+	```matlab
+	% Evaluate 3DMatch on the keypoint matching benchmark
+	evaluate;
+	```
 
 ### Geometric Registration Benchmark
 
@@ -218,7 +250,7 @@ Includes Matlab code to run evaluation on the geometric registration benchmarks 
 * `writeLog` - read registration results from every pair of fragments and create a .log file
 * `evaluate.m` - compute precision and recall from .log files for evaluation
 
-#### Quick Start
+#### Evaluation example
 
 Run the following in Matlab:
 
