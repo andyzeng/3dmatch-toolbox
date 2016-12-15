@@ -7,8 +7,8 @@ cudaLibPath = '/usr/local/cuda/lib64';
 cudnnLibPath = '/usr/local/cudnn/v5.1/lib64';
 
 % Load validation set data
-fprintf('Loading validation set data ...'); tic;
-load('validation-set.mat');
+fprintf('Loading test data ...\n'); tic;
+load('test-set.mat');
 toc;
 numComparisons = size(data,1);
 numKeypoints = numComparisons*2;

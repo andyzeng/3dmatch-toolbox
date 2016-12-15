@@ -227,8 +227,8 @@ Benchmark description and leaderboard can be found [here](http://3dmatch.cs.prin
 0. Download the validation set and test set
 
 	```shell
-	./download-validation.sh
-	./download-test.sh
+	./download-validation.sh # validation-set.mat
+	./download-test.sh # test-set.mat
 	```
 
 0. Modify and run the following script in Matlab:
@@ -253,7 +253,7 @@ Benchmark description and leaderboard can be found [here](http://3dmatch.cs.prin
 See folder `3dmatch-toolbox/evaluation/geometric-registration`
 
 Includes Matlab code to run evaluation on the geometric registration benchmarks described [here](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark). Overview:
-* `getKeyptsAndDesc.m` - generates intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments. You can also download our pre-computed data [here](). 
+* `getKeyptsAndDesc.m` - generates intermediate data (TDF voxel volumes, keypoints, and 3DMatch descriptors) for the scene fragments. You can also download our pre-computed data [here](http://3dmatch.cs.princeton.edu/#geometric-registration-synthetic-data). 
 * `runFragmentRegistration.m` - read intermediate data and run RANSAC-based registration for every pair of fragments. 
 * `writeLog` - read registration results from every pair of fragments and create a .log file
 * `evaluate.m` - compute precision and recall from .log files for evaluation

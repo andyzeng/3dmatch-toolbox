@@ -87,5 +87,5 @@ for dataIdx = 1:numComparisons
 end
 
 % Save validation set
-save('my-corres-dataset.mat','data','labels');
+save('my-corres-dataset.mat','data','labels','-v7.3');
 dlmwrite('my-corres-dataset-gt.log',[numComparisons;cell2mat(labels)]);
