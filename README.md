@@ -1,7 +1,7 @@
 # 3DMatch Toolbox
 3DMatch is a ConvNet-based local geometric feature descriptor that operates on 3D data (i.e. point clouds, depth maps, meshes, etc.). This toolbox provides code to use 3DMatch for geometric registration and keypoint matching, as well as code to train 3DMatch from existing RGB-D reconstructions. This is the reference implementation of our paper:
 
-### 3DMatch: Learning Local Geometric Descriptors from 3D Reconstructions ([pdf](), [webpage](http://3dmatch.cs.princeton.edu/))
+### 3DMatch: Learning Local Geometric Descriptors from 3D Reconstructions ([pdf](https://arxiv.org/pdf/1603.08182v2.pdf), [webpage](http://3dmatch.cs.princeton.edu/))
 
 *Andy Zeng, Shuran Song, Matthias Nießner, Matthew Fisher, Jianxiong Xiao, and Thomas Funkhouser*
 
@@ -108,29 +108,6 @@ See folder `3dmatch-toolbox/training`
 
 Code for training 3DMatch with [Marvin](http://marvin.is/), a lightweight GPU-only neural network framework. Includes Siamese network architecture .json file `training/net.json` and a CUDA/C++ Marvin data layer in `training/match.hpp` that randomly samples correspondences from RGB-D reconstruction datasets (which can be downloaded from our [project webpage](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets)).
 
-### Additional Setup Instructions
-0. Download one or more scenes from RGB-D reconstruction datasets on our [project webpage](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets). These datasets have been converted into a unified format, which is compatible with our Marvin data layer used to train 3DMatch. Save at least one scene into `data/train` and another scene into `data/test` such that the folder hierarchy looks something like this:
-
-	```shell
-	|——— training
-	     |——— core
-	          |——— marvin.hpp
-	          |——— ...
-	|——— data
-	     |——— train
-	          |——— rgbd-dataset-scene-1
-	               |——— seq-01
-	               |——— seq-02
-	               |——— camera-intrinsics.txt
-	               |——— ...
-	          |——— ...
-	     |——— test
-	          |——— rgbd-dataset-scene-2
-	               |——— seq-01
-	               |——— camera-intrinsics.txt
-	               |——— ...
-	```
-
 ### Quick Start
 0. Compile Marvin
 	
@@ -171,6 +148,29 @@ Code for training 3DMatch with [Marvin](http://marvin.is/), a lightweight GPU-on
 	./marvin train net.json your-pre-trained-weights.marvin
 	```
 
+### Additional Setup Instructions
+You can download more scenes from RGB-D reconstruction datasets on our [project webpage](http://3dmatch.cs.princeton.edu/#rgbd-reconstruction-datasets). These datasets have been converted into a unified format, which is compatible with our Marvin data layer used to train 3DMatch. Save at least one scene into `data/train` and another scene into `data/test` such that the folder hierarchy looks something like this:
+
+```shell
+|——— training
+     |——— core
+          |——— marvin.hpp
+          |——— ...
+|——— data
+     |——— train
+          |——— rgbd-dataset-scene-1
+               |——— seq-01
+               |——— seq-02
+               |——— camera-intrinsics.txt
+               |——— ...
+          |——— ...
+     |——— test
+          |——— rgbd-dataset-scene-2
+               |——— seq-01
+               |——— camera-intrinsics.txt
+               |——— ...
+```
+
 ## Multi-Frame Depth TSDF Fusion
 
 See folder `3dmatch-toolbox/depth-fusion`
@@ -179,7 +179,7 @@ CUDA/C++ code to fuse multiple registered depth maps into a TSDF voxel volume ([
 
 ### Demo
 
-Fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgbd-frames` into a TSDF voxel volume, and creates a surface point cloud `tsdf.ply`
+This demo fuses 50 registered depth maps from directory `data/sample/depth-fusion-demo/rgbd-frames` into a TSDF voxel volume, and creates a surface point cloud `tsdf.ply`
 
 ```shell
 cd 3dmatch-toolbox/depth-fusion
