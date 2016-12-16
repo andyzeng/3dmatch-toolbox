@@ -1,7 +1,7 @@
 # 3DMatch Toolbox
 3DMatch is a ConvNet-based local geometric feature descriptor that operates on 3D data (i.e. point clouds, depth maps, meshes, etc.). This toolbox provides code to use 3DMatch for geometric registration and keypoint matching, as well as code to train 3DMatch from existing RGB-D reconstructions. This is the reference implementation of our paper:
 
-### 3DMatch: Learning Local Geometric Descriptors from 3D Reconstructions ([pdf](https://arxiv.org/pdf/1603.08182v2.pdf), [webpage](http://3dmatch.cs.princeton.edu/))
+### 3DMatch: Learning Local Geometric Descriptors from RGB-D Reconstructions ([pdf](https://arxiv.org/pdf/1603.08182v2.pdf), [webpage](http://3dmatch.cs.princeton.edu/))
 
 *Andy Zeng, Shuran Song, Matthias Nießner, Matthew Fisher, Jianxiong Xiao, and Thomas Funkhouser*
 
@@ -273,7 +273,7 @@ Note: the TDF voxel grids of the scene fragments from the synthetic benchmark we
 
 See folder `3dmatch-toolbox/evaluation/model-fitting-apc`
 
-Includes code and pre-trained models to evaluate 3DMatch for model fitting on the Shelf & Tote dataset. For an evaluation example, run Matlab script `getError.m`
+Includes code and pre-trained models to evaluate 3DMatch for model fitting on the [Shelf & Tote dataset](http://www.cs.princeton.edu/~andyz/apc2016). You can download our pre-computed data (TDF voxel grid volumes for objects and scans, surface keypoints, descriptors, and pose predictions) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/apc-intermediate-data.zip). For an evaluation example, run Matlab script `getError.m`
 
 ### Mesh Correspondence in Shape2Pose
 

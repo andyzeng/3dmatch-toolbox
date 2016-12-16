@@ -1,5 +1,14 @@
 % Run 3DMatch on the validation set for keypoint matching and write a
 % corresponding .log file for evaluation.
+%
+% ---------------------------------------------------------
+% Copyright (c) 2016, Andy Zeng
+% 
+% This file is part of the 3DMatch Toolbox and is available 
+% under the terms of the Simplified BSD License provided in 
+% LICENSE. Please retain this notice and LICENSE if you use 
+% this file (or any portion of it) in your project.
+% ---------------------------------------------------------
 
 % CUDA/CUDNN paths (for system call)
 cudaBinPath = '/usr/local/cuda/bin';
@@ -7,8 +16,8 @@ cudaLibPath = '/usr/local/cuda/lib64';
 cudnnLibPath = '/usr/local/cudnn/v5.1/lib64';
 
 % Load validation set data
-fprintf('Loading test data ...\n'); tic;
-load('test-set.mat');
+fprintf('Loading data ...\n'); tic;
+load('validation-set.mat');
 toc;
 numComparisons = size(data,1);
 numKeypoints = numComparisons*2;
