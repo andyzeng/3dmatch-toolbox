@@ -57,6 +57,7 @@ Our reference implementation of 3DMatch, as well as other components in this too
 
 ## Table of Contents
 * [Demo: Align Two Point Clouds with 3DMatch](#demo-align-two-point-clouds-with-3dmatch)
+* [Converting 3D Data to TDF Voxel Grids](#converting-3d-data-to-tdf-voxel-grids)
 * [Training 3DMatch from RGB-D Reconstructions](#training-3dmatch-from-rgb-d-reconstructions)
 * [Multi-Frame Depth TSDF Fusion](#multi-frame-depth-tsdf-fusion)
 * [Evaluation Code](#evaluation-code)
@@ -103,6 +104,52 @@ This demo aligns two 3D point clouds (projected from single-view depth maps) usi
 	% of this demo due to bad keypoints, which are selected randomly by default.
 	demo;
 	```
+
+## Converting 3D Data to TDF Voxel Grids
+
+Instructions on how to convert from various 3D data representations into a voxel grid of Truncated Distance Function (TDF) values.
+
+0. Point cloud to TDF voxel grid (using nearest neighbor point distances)
+ * See [C++/CUDA demo code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/core/demo.cu) (ComputeTDF) which approximates TDF values using an occupancy voxel grid.
+ * Alternative: See [Matlab/CUDA code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/deprecated/pointCloud2AccTDF.m) which computes accurate TDF values but is very slow.
+ * Alternative: See [Matlab code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/evaluation/model-fitting-apc/pointCloud2TDF.m) which also computes accurate TDF values, but works standalone on Matlab. Usually runs without memory problems if your mesh is small.
+
+0. Mesh to TDF voxel grid (using distance transform to mesh surface with [GAPS](https://github.com/tomfunkhouser/gaps))
+ * Instructions on installing GAPS and converting a sample mesh (.off file) into a voxel grid (binary .raw file of floats):
+
+	```shell
+	cd 3dmatch-toolbox
+
+	# Download and install GAPS
+	git clone https://github.com/tomfunkhouser/gaps.git gaps
+	cd gaps
+	make
+	cd apps
+
+	# Download and compile msh2df
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/msh2df.zip
+	unzip msh2df.zip
+	cd msh2df
+	make
+
+	# Run msh2df on example mesh file (see comments in msh2df.cpp for more instructions)
+	cd ../../bin/x86_64
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/bicycle000002.off
+	./msh2df bicycle000002.off bicycle000002.raw -v # see comments in msh2df.cpp for more arguments
+
+	# Download visualization script
+	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/showTDF.m
+	```
+ * Run the visualization script in Matlab
+
+	```matlab
+	% Visualize TDF voxel grid of mesh
+	showTDF;
+	```
+
+0. Depth map to TDF voxel grid
+ * Project depth map into a point cloud in 3D camera space and convert from point cloud to TDF voxel grid (see above)
+ * Alternative: Convert from depth map(s) into a TSDF volume (see instructions [here](#multi-frame-depth-tsdf-fusion)) and compute the absolute value of each voxel (aka. projective TDF values, which behave differently near the view boundaries and regions of missing depth)
 
 ## Training 3DMatch from RGB-D Reconstructions
 
