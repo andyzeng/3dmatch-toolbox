@@ -110,11 +110,11 @@ This demo aligns two 3D point clouds (projected from single-view depth maps) usi
 Instructions on how to convert from various 3D data representations into a voxel grid of Truncated Distance Function (TDF) values.
 
 0. Point cloud to TDF voxel grid (using nearest neighbor point distances)
- * See [C++/CUDA demo code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/core/demo.cu) (ComputeTDF) which approximates TDF values using an occupancy voxel grid.
+ * See [C++/CUDA demo code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/core/demo.cu) (ComputeTDF) which approximates TDF values (fast) using an occupancy voxel grid.
  * Alternative: See [Matlab/CUDA code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/deprecated/pointCloud2AccTDF.m) which computes accurate TDF values but is very slow.
- * Alternative: See [Matlab code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/evaluation/model-fitting-apc/pointCloud2TDF.m) which also computes accurate TDF values, but works standalone on Matlab. Usually runs without memory problems if your mesh is small.
+ * Alternative: See [Matlab code](https://github.com/andyzeng/3dmatch-toolbox/blob/master/evaluation/model-fitting-apc/pointCloud2TDF.m) which also computes accurate TDF values, but works standalone on Matlab. Usually runs without memory problems if your point cloud is small.
 
-0. Mesh to TDF voxel grid (using distance transform to mesh surface with [GAPS](https://github.com/tomfunkhouser/gaps))
+0. Mesh to TDF voxel grid (using distance transform of mesh surface with [GAPS](https://github.com/tomfunkhouser/gaps))
  * Instructions on installing GAPS and converting a sample mesh (.off file) into a voxel grid (binary .raw file of floats):
 
 	```shell
