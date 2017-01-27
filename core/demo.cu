@@ -84,8 +84,10 @@ int main(int argc, char * argv[]) {
       tmp_line >> num_pts;
     }
   }
-  if (num_pts == 0)
+  if (num_pts == 0) {
+    std::cerr << "Third line of .ply file does not tell me number of points. Double check format of point cloud file (or change .ply file reader code)." << std::endl;
     return 0;
+  }
   float * pts = new float[num_pts * 3]; // Nx3 matrix saved as float array (row-major order)
   pointcloud_file.read((char*)pts, sizeof(float) * num_pts * 3);
   pointcloud_file.close();
