@@ -10,8 +10,14 @@ struct KeypointMatchEntry
 
 struct DepthImage
 {
+	void load(const string &filename);
+	void filter();
+	void save();
+
 	Grid2f depths;
-	PointCloudf points;
+	Grid2f smoothDepths;
+	Grid2<vec3f> gridPoints;
+	PointCloudf allPoints;
 };
 
 struct App

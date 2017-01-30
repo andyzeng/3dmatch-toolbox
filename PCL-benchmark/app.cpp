@@ -1,14 +1,18 @@
 
 #include "main.h"
 
-#define USE_FPFH
+//#define USE_FPFH
 //#define USE_SPIN
+//#define USE_SHOT
+//#define USE_VFH
+//#define USE_CVFH
+#define USE_RSD
 
 const float camK[9] = { 585,0,320,0,585,240,0,0,1 };
-const float descriptorRadius = 0.2f;
+const float descriptorRadius = 0.4f;
 const float descriptorRadiusSq = descriptorRadius * descriptorRadius;
 
-const int normalK = 100;
+const int normalK = 50;
 const int fpfhK = 1500;
 
 const float spinRadius = 20.0f; // keypoint-tsdf
@@ -34,7 +38,51 @@ const string descOutFilename = "keypoint-spin.dat";
 const int descriptorSize = 153;
 #endif
 
-const string cacheBase = R"(D:\Code\3DMatch\dataset\cacheYY)" + string("-") + descName + "\\";
+#ifdef USE_SHOT
+const bool useFPFH = false;
+const bool useSpin = false;
+const bool useShot = true;
+const bool useVFH = false;
+const string descName = "shot";
+const string descOutFilename = "keypoint-SHOT.dat";
+const int descriptorSize = 352;
+#endif
+
+#ifdef USE_VFH
+const bool useFPFH = false;
+const bool useSpin = false;
+const bool useShot = false;
+const bool useVFH = true;
+const bool useCVFH = false;
+const string descName = "vfh";
+const string descOutFilename = "keypoint-vfh-k100.dat";
+const int descriptorSize = 308;
+#endif
+
+#ifdef USE_CVFH
+const bool useFPFH = false;
+const bool useSpin = false;
+const bool useShot = false;
+const bool useVFH = false;
+const bool useCVFH = true;
+const string descName = "cvfh";
+const string descOutFilename = "keypoint-cvfh.dat";
+const int descriptorSize = 308;
+#endif
+
+#ifdef USE_RSD
+const bool useFPFH = false;
+const bool useSpin = false;
+const bool useShot = false;
+const bool useVFH = false;
+const bool useCVFH = false;
+const bool useRSD = true;
+const string descName = "rsd";
+const string descOutFilename = "keypoint-rsd-060.dat";
+const int descriptorSize = 2;
+#endif
+
+const string cacheBase = R"(D:\Code\3DMatch\dataset\cacheRSD-060)" + string("-") + descName + "\\";
 
 const string problemName = "APC";
 
@@ -65,7 +113,17 @@ void App::loadKeypointMatchEntries()
 	cout << filenameSet.size() << " unique depth files" << endl;
 }
 
-DepthImage App::makeDepthImage(const string &filename) const
+void DepthImage::filter()
+{
+
+}
+
+void DepthImage::save()
+{
+
+}
+
+void DepthImage::load(const string &filename)
 {
 	const string fullFilename = R"(C:\Code\3DMatch\dataset\)" + filename + ".depth.png";
 	DepthImage16 depthImage;
@@ -90,6 +148,11 @@ DepthImage App::makeDepthImage(const string &filename) const
 		}
 	}
 	return result;
+}
+
+DepthImage App::makeDepthImage() const
+{
+	
 }
 
 void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
@@ -142,18 +205,35 @@ void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
 	{
 		util::runSystemCommand("pcl_spin_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
 	}
+	if (useShot)
+	{
+		util::runSystemCommand("pcl_shot_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
+	}
+	if (useVFH)
+	{
+		util::runSystemCommand("pcl_vfh_estimation_release.exe " + normalFilename + " " + descFilename);
+	}
+	if (useCVFH)
+	{
+		util::runSystemCommand("pcl_cvfh_estimation_release.exe " + normalFilename + " " + descFilename);
+	}
+	if (useRSD)
+	{
+		util::runSystemCommand("pcl_rsd_estimation_release.exe " + normalFilename + " " + descFilename);
+	}
 	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + descFilename + " " + asciiFilename + " 0");
+
+	ofstream outFile(finalFilename);
 	const string outLine = util::getFileLines(asciiFilename, 0)[targetLineIndex];
 	auto parts = util::split(outLine, " ");
 	parts.resize(descriptorSize);
-	ofstream outFile(finalFilename);
 	for (auto &f : parts)
 		outFile << f << " ";
 }
 
 void App::computeKeypointDescriptors()
 {
-#pragma omp parallel for
+#pragma omp parallel for schedule(dynamic) num_threads(32)
 	for(int i = 0; i < keypointMatchEntries.size(); i++)
 	{
 		computeKeypointDescriptor(keypointMatchEntries[i]);
@@ -297,6 +377,22 @@ void App::computeBinDescriptor(const string &filenameIn, const string &filenameO
 	{
 		util::runSystemCommand("pcl_spin_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
 	}
+	if (useShot)
+	{
+		util::runSystemCommand("pcl_shot_estimation_release.exe " + normalFilename + " " + descFilename + " -radius " + to_string(spinRadius));
+	}
+	if (useVFH)
+	{
+		util::runSystemCommand("pcl_vfh_estimation_release.exe " + normalFilename + " " + descFilename);
+	}
+	if (useCVFH)
+	{
+		util::runSystemCommand("pcl_cvfh_estimation_release.exe " + normalFilename + " " + descFilename);
+	}
+	if (useRSD)
+	{
+		util::runSystemCommand("pcl_rsd_estimation_release.exe " + normalFilename + " " + descFilename);
+	}
 	util::runSystemCommand("pcl_convert_pcd_ascii_binary_release.exe " + descFilename + " " + asciiFilename + " 0");
 	const string outLine = util::getFileLines(asciiFilename, 0)[targetLineIndex];
 	auto parts = util::split(outLine, " ");
@@ -389,12 +485,12 @@ void App::go()
 {
 	util::makeDirectory(cacheBase);
 
-	const bool keypointEval = true;
-	const bool fragmentEval = false;
+	const bool keypointEval = false;
+	const bool fragmentEval = true;
 	const bool APCEval = false;
 	if (keypointEval)
 	{
-		vector<string> fragmentList;
+		/*vector<string> fragmentList;
 		for (auto &s : Directory::enumerateFilesWithPath(R"(C:\Code\3DMatch\dataset\for-matt)", ".bin"))
 		{
 			fragmentList.push_back(s);
@@ -404,12 +500,12 @@ void App::go()
 		for (int i = 0; i < fragmentList.size(); i++)
 		{
 			//computeBinDescriptor(fragmentList[i], "");
-		}
+		}*/
 
-		computeFinalDescFileTDFs();
-		//loadKeypointMatchEntries();
-		//computeKeypointDescriptors();
-		//computeFinalDescFile();
+		//computeFinalDescFileTDFs();
+		loadKeypointMatchEntries();
+		computeKeypointDescriptors();
+		computeFinalDescFile();
 	}
 	if (APCEval)
 	{
@@ -436,7 +532,7 @@ void App::go()
 		//fragmentList.push_back(datasetDir + "synthetic\\iclnuim-office1\\");
 		//fragmentList.push_back(datasetDir + "synthetic\\iclnuim-office2\\");
 		//
-		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen1\\");
+		fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen1\\");
 		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen2\\");
 		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen3\\");
 		//fragmentList.push_back(datasetDir + "real\\7-scenes-redkitchen4\\");
@@ -444,8 +540,8 @@ void App::go()
 		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c3-hv_c3_1\\");
 		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c6-hv_c6_1\\");
 		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c8-hv_c8_3\\");
-		fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c11-hv_c11_2\\");
-		fragmentList.push_back(datasetDir + "real\\sun3d-hotel_umd-maryland_hotel3\\");
+		//fragmentList.push_back(datasetDir + "real\\sun3d-harvard_c11-hv_c11_2\\");
+		//fragmentList.push_back(datasetDir + "real\\sun3d-hotel_umd-maryland_hotel3\\");
 
 #pragma omp parallel for schedule(dynamic)
 		for (int i = 0; i < fragmentList.size(); i++)
