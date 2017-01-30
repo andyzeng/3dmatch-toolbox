@@ -16,12 +16,8 @@ void main()
 {
 	g_benchmarkParams = new BenchmarkParams();
 
-	convertDirectory(R"(C:\Users\matfishe\Downloads\formatt\fr2-xyz\pcds\)");
-	convertDirectory(R"(C:\Users\matfishe\Downloads\formatt\fr2-xyz-old\pcds\)");
-	convertDirectory(R"(C:\Users\matfishe\Downloads\formatt\fr3-nstn\pcds\)");
-	convertDirectory(R"(C:\Users\matfishe\Downloads\formatt\fr3-office\pcds\)");
-	
-	return;
+	//convertDirectory(R"(C:\Users\matfishe\Downloads\fr2-xyz-old\)");
+	//return;
 
 	App app;
 	app.go();

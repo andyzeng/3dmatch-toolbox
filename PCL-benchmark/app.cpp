@@ -113,14 +113,101 @@ void App::loadKeypointMatchEntries()
 	cout << filenameSet.size() << " unique depth files" << endl;
 }
 
-void DepthImage::filter()
-{
 
+float gaussR(float sigma, float dist)
+{
+	return exp(-(dist*dist) / (2.0*sigma*sigma));
 }
 
-void DepthImage::save()
+float linearR(float sigma, float dist)
 {
+	return max(1.0f, min(0.0f, 1.0f - (dist*dist) / (2.0f*sigma*sigma)));
+}
 
+float gaussD(float sigma, int x, int y)
+{
+	return exp(-((x*x + y*y) / (2.0f*sigma*sigma)));
+}
+
+float gaussD(float sigma, int x)
+{
+	return exp(-((x*x) / (2.0f*sigma*sigma)));
+}
+
+vec3f DepthImage::makePt(int x, int y, float depth)
+{
+	vec3f pt;
+	pt.z = depth;
+	pt.x = ((float)x + 0.5f - camK[0 * 3 + 2]) * depth / camK[0 * 3 + 0];
+	pt.y = ((float)y + 0.5f - camK[1 * 3 + 2]) * depth / camK[1 * 3 + 1];
+	return pt;
+}
+
+void DepthImage::filter()
+{
+	const float inf = numeric_limits<float>::infinity();
+	const float depthSigmaD = 2.0f;
+	const float depthSigmaR = 0.1f;
+	const int kernelRadius = (int)ceil(2.0*depthSigmaD);
+
+	smoothDepths = rawDepths;
+	smoothDepths.setValues(inf);
+
+	const int dimX = smoothDepths.getDimX();
+	const int dimY = smoothDepths.getDimY();
+	
+
+	for (auto &pSmooth : smoothDepths)
+	{
+		int xCenter = pSmooth.x;
+		int yCenter = pSmooth.y;
+		
+		float sum = 0.0f;
+		float sumWeight = 0.0f;
+
+		const float depthCenter = rawDepths(xCenter, yCenter);
+		if (depthCenter > 0.0f && depthCenter != inf)
+		{
+			for (int m = xCenter - kernelRadius; m <= xCenter + kernelRadius; m++)
+			{
+				for (int n = yCenter - kernelRadius; n <= yCenter + kernelRadius; n++)
+				{
+					if (m >= 0 && n >= 0 && m < dimX && n < dimY)
+					{
+						const float currentDepth = rawDepths(xCenter, yCenter);
+
+						if (currentDepth > 0.0f && currentDepth != inf)
+						{
+							const float weight = gaussD(depthSigmaD, m - xCenter, n - yCenter) * gaussR(depthSigmaR, currentDepth - depthCenter);
+
+							sumWeight += weight;
+							sum += weight*currentDepth;
+						}
+					}
+				}
+			}
+
+			if (sumWeight > 0.0f) pSmooth.value = sum / sumWeight;
+		}
+	}
+}
+
+void DepthImage::saveDebug()
+{
+	PointCloudIOf::saveToPLY(R"(C:\Code\3DMatch\dataset\debug.ply)", cloud);
+}
+
+void DepthImage::makePointCloud()
+{
+	for (auto &p : smoothDepths)
+	{
+		float depth = p.value;
+		if (depth > 0.0f && depth != numeric_limits<float>::infinity())
+		{
+			const vec3f pt = makePt(p.x, p.y, depth);
+			cloud.m_points.push_back(pt);
+		}
+	}
 }
 
 void DepthImage::load(const string &filename)
@@ -129,30 +216,26 @@ void DepthImage::load(const string &filename)
 	DepthImage16 depthImage;
 	FreeImageWrapper::loadImage(fullFilename, depthImage);
 
-	DepthImage result;
-	result.depths.allocate(depthImage.getDimensions(), 0.0f);
+	rawDepths.allocate(depthImage.getDimensions(), 0.0f);
 	for (auto &p : depthImage)
 	{
 		float depth = float(p.value) / 1000.0f;
 		if (depth > 10.0f) // Invalid depth
 			depth = 0.0f;
 
-		result.depths(p.x, p.y) = depth;
-		if (depth > 0.0f)
+		rawDepths(p.x, p.y) = depth;
+		/*if (depth > 0.0f)
 		{
 			vec3f pt;
 			pt.z = depth;
 			pt.x = ((float)p.x + 0.5f - camK[0 * 3 + 2]) * depth / camK[0 * 3 + 0];
 			pt.y = ((float)p.y + 0.5f - camK[1 * 3 + 2]) * depth / camK[1 * 3 + 1];
 			result.points.m_points.push_back(pt);
-		}
+		}*/
 	}
-	return result;
-}
 
-DepthImage App::makeDepthImage() const
-{
-	
+	filter();
+	makePointCloud();
 }
 
 void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
@@ -171,9 +254,10 @@ void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
 	}
 
 	//DepthImage &image = *allImages[entry.file];
-	DepthImage image = makeDepthImage(entry.file);
-
-	const float depth = image.depths(entry.x, entry.y);
+	DepthImage image;
+	image.load(entry.file);
+	
+	const float depth = image.rawDepths(entry.x, entry.y);
 	vec3f queryPt;
 	queryPt.z = depth;
 	queryPt.x = ((float)entry.x + 0.5f - camK[0 * 3 + 2]) * depth / camK[0 * 3 + 0];
@@ -181,7 +265,7 @@ void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
 	
 	PointCloudf localCloud;
 	localCloud.m_points.push_back(queryPt);
-	for (auto &v : image.points.m_points)
+	for (auto &v : image.cloud.m_points)
 	{
 		if (vec3f::distSq(v, queryPt) < descriptorRadiusSq)
 		{
@@ -191,7 +275,7 @@ void App::computeKeypointDescriptor(KeypointMatchEntry &entry)
 	}
 
 	cout << "Local cloud points: " << localCloud.m_points.size() << endl;
-	cout << "Total cloud points: " << image.points.m_points.size() << endl;
+	cout << "Total cloud points: " << image.cloud.m_points.size() << endl;
 
 	cout << "processing " << entryDesc << endl;
 	cout << "query pt: " << queryPt << endl;
@@ -485,9 +569,16 @@ void App::go()
 {
 	util::makeDirectory(cacheBase);
 
+	const bool testDepthMap = true;
 	const bool keypointEval = false;
-	const bool fragmentEval = true;
+	const bool fragmentEval = false;
 	const bool APCEval = false;
+	if (testDepthMap)
+	{
+		DepthImage image;
+		image.load(R"(data\test\7-scenes-redkitchen\seq-01\frame-000006)");
+		image.saveDebug();
+	}
 	if (keypointEval)
 	{
 		/*vector<string> fragmentList;
