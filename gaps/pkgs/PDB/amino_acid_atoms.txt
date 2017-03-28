@@ -1,0 +1,186 @@
+ALA C     C        CA  O
+ALA CA    CH1E     N   CB  C
+ALA CB    CH3E     CA
+ALA N     NH1     -C   CA
+ALA O     O        C
+              
+CYS C     C        CA  O
+CYS CA    CH1E     N   CB  C
+CYS CB    CH2E     CA  SG
+CYS N     NH1     -C   CA
+CYS O     O        C
+CYS SG    SH1E     CB
+              
+GLU C     C        CA  O
+GLU CA    CH1E     N   CB  C
+GLU CB    CH2E     CA  CG
+GLU CD    CH0      CG  OE1 OE2
+GLU CG    CH2E     CB  CD
+GLU N     NH1     -C   CA
+GLU O     O        C
+GLU OE1   OC       CD
+GLU OE2   OC       CD
+              
+ASP C     C        CA  O
+ASP CA    CH1E     N   CB  C
+ASP CB    CH2E     CA  CG
+ASP CG    CH0      CB  OD1 OD2
+ASP N     NH1     -C   CA
+ASP O     O        C
+ASP OD1   OC       CG
+ASP OD2   OC       CG
+              
+PHE C     C        CA  O
+PHE CA    CH1E     N   CB  C
+PHE CB    CH2E     CA  CG
+PHE CD1   CR1E     CG  CE1
+PHE CD2   CR1E     CG  CE2
+PHE CE1   CR1E     CD1 CZ
+PHE CE2   CR1E     CD2 CZ
+PHE CG    CF       CB  CD1 CD2
+PHE CZ    CR1E     CE1 CE2
+PHE N     NH1     -C   CA
+PHE O     O        C
+              
+GLY C     C        CA  O
+GLY CA    CH2G     N   C
+GLY N     NH1     -C   CA
+GLY O     O        C
+              
+HIS C     C        CA  O
+HIS CA    CH1E     N   CB  C
+HIS CB    CH2E     CA  CG
+HIS CD2   CR1H     CG  NE2
+HIS CE1   CRHH     ND1 NE2
+HIS CG    C5       CB  CD2 ND1
+HIS N     NH1     -C   CA
+HIS ND1   NH1S     CG  CE1
+HIS NE2   NH1S     CD2 CE1
+HIS O     O        C
+              
+ILE C     C        CA  O
+ILE CA    CH1E     N   CB  C
+ILE CB    CH1S     CA  CG1 CG2
+ILE CD1   CH3E     CG1
+ILE CG1   CH2E     CB  CD1
+ILE CG2   CH3E     CB
+ILE N     NH1     -C   CA
+ILE O     O        C
+              
+LYS C     C        CA  O
+LYS CA    CH1E     N   CB  C
+LYS CB    CH2E     CA  CG
+LYS CD    CH2E     CG  CE
+LYS CE    CH2E     CD  NZ
+LYS CG    CH2E     CB  CD
+LYS N     NH1     -C   CA
+LYS NZ    NH3      CE
+LYS O     O        C
+              
+LEU C     C        CA  O
+LEU CA    CH1E     N   CB  C
+LEU CB    CH2E     CA  CG
+LEU CD1   CH3E     CG
+LEU CD2   CH3E     CG
+LEU CG    CH1S     CB  CD1 CD2
+LEU N     NH1     -C   CA
+LEU O     O        C
+              
+MET C     C        CA  O
+MET CA    CH1E     N   CB  C
+MET CB    CH2E     CA  CG
+MET CE    CH3E     SD
+MET CG    CH2E     CB  SD
+MET N     NH1     -C   CA
+MET O     O        C
+MET SD    SM       CG  CE
+              
+ASN C     C        CA  O
+ASN CA    CH1E     N   CB  C
+ASN CB    CH2E     CA  CG
+ASN CG    CH0      CB  OD1 ND2
+ASN N     NH1     -C   CA
+ASN ND2   NH2      CG
+ASN O     O        C
+ASN OD1   OS       CG
+              
+PRO C     C        CA  O
+PRO CA    CH1E     N   CB  C
+PRO CB    CH2E     CA  CG
+PRO CD    CH2P     N   CG
+PRO CG    CH2P     CB  CD
+PRO N     N       -C   CA  CD
+PRO O     O        C
+              
+GLN C     C        CA  O
+GLN CA    CH1E     N   CB  C
+GLN CB    CH2E     CA  CG
+GLN CD    CH0      CG  NE2 OE1
+GLN CG    CH2E     CB  CD
+GLN N     NH1     -C   CA
+GLN NE2   NH2      CD
+GLN O     O        C
+GLN OE1   OS       CD
+              
+ARG C     C        CA  O
+ARG CA    CH1E     N   CB  C
+ARG CB    CH2E     CA  CG
+ARG CD    CH2E     CG  NE
+ARG CG    CH2E     CB  CD
+ARG CZ    CH0      NE  NH1 NH2
+ARG N     NH1     -C   CA
+ARG NE    NH1S     CD  CZ
+ARG NH1   NC2      CZ
+ARG NH2   NC2      CZ
+ARG O     O        C
+              
+SER C     C        CA  O
+SER CA    CH1E     N   CB  C
+SER CB    CH2E     CA  OG
+SER N     NH1     -C   CA
+SER O     O        C
+SER OG    OH1      CB
+              
+THR C     C        CA  O
+THR CA    CH1E     N   CB  C
+THR CB    CH1S     CA  CG2 OG1
+THR CG2   CH3E     CB
+THR N     NH1     -C   CA
+THR O     O        C
+THR OG1   OH1      CB
+              
+VAL C     C        CA  O
+VAL CA    CH1E     N   CB  C
+VAL CB    CH1S     CA  CG1 CG2
+VAL CG1   CH3E     CB
+VAL CG2   CH3E     CB
+VAL N     NH1     -C   CA
+VAL O     O        CTRP C     C        CA  O
+
+TRP CA    CH1E     N   CB  C
+TRP CB    CH2E     CA  CG
+TRP CD1   CR1E     CG  NE1
+TRP CD2   CW       CG  CE2 CE3
+TRP CE2   CW       CD2 CZ2 NE1
+TRP CE3   CR1E     CD2 CZ3
+TRP CG    C5W      CB  CD1 CD2
+TRP CH2   CR1W     CZ2 CZ3
+TRP CZ2   CR1W     CE2 CH2
+TRP CZ3   CR1E     CE3 CH2
+TRP N     NH1     -C   CA
+TRP NE1   NH1S     CD1 CE2
+TRP O     O        C
+              
+TYR C     C        CA  O
+TYR CA    CH1E     N   CB  C
+TYR CB    CH2E     CA  CG
+TYR CD1   CR1E     CG  CE1
+TYR CD2   CR1E     CG  CE2
+TYR CE1   CR1E     CD1 CZ
+TYR CE2   CR1E     CD2 CZ
+TYR CG    CY       CB  CD1 CD2
+TYR CZ    CY2      CE1 CE2 OH
+TYR N     NH1     -C   CA
+TYR O     O        C
+TYR OH    OH1      CZ
+              

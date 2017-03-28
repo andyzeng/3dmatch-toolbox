@@ -1,0 +1,85 @@
+#
+# Makefile for GAPS applications
+#
+
+
+
+#
+# Before this Makefile is included ...
+#   $(NAME) should be module name
+#   $(CCSRCS) should list C++ source files
+#
+# For example ...
+#   NAME=foo
+#   CCSRCS=$(NAME).C \
+#       foo1.C foo2.C foo3.C
+#
+
+
+#
+# Set up compiler options, etc.
+#
+
+include ../../scripts/Makefile.std
+
+
+
+#
+# Set up target executable
+#
+
+EXE=$(EXE_DIR)/$(NAME).exe
+
+
+
+#
+# Set up link options
+#
+
+BASE_LDFLAGS=$(USER_LDFLAGS) /link /libpath:$(LIB_DIR)
+DEBUG_LDFLAGS=$(BASE_LDFLAGS) -Zi
+OPT_LDFLAGS=$(BASE_LDFLAGS) -Ox 
+LDFLAGS=$(DEBUG_LDFLAGS)
+
+
+
+#
+# Set up libs
+#
+
+OPENGL_LIBS=glut32.lib glu32.lib opengl32.lib
+STD_LIBS =wsock32.lib user32.lib gdi32.lib advapi32.lib
+LIBS=$(USER_LIBS) $(PKG_LIBS) $(OPENGL_LIBS) $(STD_LIBS)
+
+
+
+#
+# Make targets
+#
+
+opt:
+	    $(MAKE) $(EXE) "CFLAGS=$(OPT_CFLAGS)" "LDFLAGS=$(OPT_LDFLAGS)"
+
+debug:
+	    $(MAKE) $(EXE) "CFLAGS=$(DEBUG_CFLAGS)" "LDFLAGS=$(DEBUG_LDFLAGS)"
+
+$(EXE):	    $(OBJS) $(LIBDIR)
+	    mkdir -p $(EXE_DIR)
+	    $(CC) -o $(EXE) $(OBJS) $(LDFLAGS) $(LIBS)
+
+release:
+	    mkdir -p $(RELEASE_DIR)/apps
+	    mkdir $(RELEASE_DIR)/apps/$(NAME)1
+	    cp *.[cCIh] $(RELEASE_DIR)/apps/$(NAME)1
+	    cp Makefile $(RELEASE_DIR)/apps/$(NAME)1
+	    rm -r -f $(RELEASE_DIR)/apps/$(NAME)
+	    mv $(RELEASE_DIR)/apps/$(NAME)1 $(RELEASE_DIR)/apps/$(NAME)
+
+clean:
+	    - rm -f *~ *.obj $(EXE)
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+#
+# Makefile setup for GAPS
+#
+
+
+
+#
+# Targets
+#
+
+OBJS=$(CCSRCS:.C=.obj) $(CCSRCS:.c=.obj) 
+INCS=$(HSRCS) $(CCSRCS:.C=.h)
+
+
+
+#
+# C flags
+#
+
+CC=cl
+BASE_CFLAGS=$(USER_CFLAGS) /TP /W3 -I. -I../../pkgs 
+DEBUG_CFLAGS=-Zi $(BASE_CFLAGS)
+OPT_CFLAGS=-Ox -DNDEBUG $(BASE_CFLAGS)
+CFLAGS=$(DEBUG_CFLAGS)
+
+
+
+#
+# Directories
+#
+
+RELEASE_DIR=../../release
+EXE_DIR=../../bin/win32
+LIB_DIR=../../lib/win32
+
+
+
+#
+# Default rules
+#
+
+.SUFFIXES: .c .C .obj
+
+.C.obj:
+	$(CC) $(CFLAGS) -c $<
+
+.c.obj:
+	$(CC) $(CFLAGS) -c $<
+
+

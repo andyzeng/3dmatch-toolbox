@@ -1,0 +1,93 @@
+<HR><H2>Description:</H2>
+
+The R3Shapes package supports basics 3D geometry classes.
+<P>
+It contains classes representing 3D primitives (such as vectors,
+points, lines, rays, spans, planes, and halfspaces).  It also contains
+classes for 3D transformations (such as 4x4 matrices, etc.) and higher
+level 3D shapes (such as polygons, boxes, spheres, cones, pyramids,
+prisms, etc).  The higher level shape classes are derived from an
+abstract R3Shape class which supports transformations, bounding box
+queries, drawing, and other abstract geometric functions.
+<P>
+For all pairs of 3D primitives (and many 3D shapes), functions are
+provided for computing the relationships between them.  For instance,
+there are functions to compute the distance between primitives
+(R3Distance), check for intersections (R3Intersects), check whether
+one primitive contains another (R3Contains), compute whether
+primitives are perpendicular (R3Perpendicular), and check whether
+primitives are parallel (R3Parallel).
+<P>
+
+
+<HR><H2>List of Classes:</H2>
+
+<DL>
+<DT> 3D Primitives:
+<DL>
+  <DT> <A HREF="#R3Vector">R3Vector</A> - 3D vector.
+  <DT> <A HREF="#R3Point">R3Point</A> - 3D point.
+  <DT> <A HREF="#R3Line">R3Line</A> - 3D infinite line.
+  <DT> <A HREF="#R3Ray">R3Ray</A> - 3D ray.
+  <DT> <A HREF="#R3Span">R3Span</A> - 3D line segment.
+  <DT> <A HREF="#R3Plane">R3Plane</A> - 3D plane.
+  <DT> <A HREF="#R3Halfspace">R3Halfspace</A> - 3D halfspace.
+  <DT> &nbsp;
+</DL>
+
+<DT> 3D Shapes:
+<DL>
+  <DT> <A HREF="#R3Shape">R3Shape</A> - abstract 3D shape.
+  <DT> <A HREF="#R3Surface">R3Surface</A> - abstract 3D surface.
+  <DT> <A HREF="#R3Circle">R3Circle</A> - 3D circle.
+  <DT> <A HREF="#R3Ellipse">R3Ellipse</A> - 3D ellipse.
+  <DT> <A HREF="#R3Triangle">R3Triangle</A> - 3D triangle.
+  <DT> <A HREF="#R3Mesh">R3Mesh</A> - surface defined by a set of 3D triangles.
+  <DT> <A HREF="#R3Solid">R3Solid</A> - abstract 3D solid.
+  <DT> <A HREF="#R3Box">R3Box</A> - 3D axis-aligned box. 
+  <DT> <A HREF="#R3Cylinder">R3Cylinder</A> - 3D cylinder.
+  <DT> <A HREF="#R3Cone">R3Cone</A> - 3D cone.
+  <DT> <A HREF="#R3Sphere">R3Sphere</A> - 3D sphere.
+  <DT> <A HREF="#R3Ellipsoid">R3Ellipsoid</A> - 3D axis-aligned ellipsoid.
+  <DT> <A HREF="#R3Grid">R3Grid</A> - 3D scalar grid.
+  <DT> &nbsp;
+</DL>
+
+<DT> 3D Transformations:
+<DL>
+  <DT> <A HREF="#R3Transformation">R3Transformation</A> - abstract 3D transformation.
+  <DT> <A HREF="#R3Affine">R3Affine</A> - 3D affine transformation.
+  <DT> <A HREF="#R3CoordSystem">R3CoordSystem</A> - 3D coordinate system (origin and triad).
+  <DT> <A HREF="#R3Triad">R3Triad</A> - 3 orthogonal axis vectors.
+  <DT> <A HREF="#R4Matrix">R4Matrix</A> - 4x4 matrix.
+  <DT> &nbsp;
+</DL>
+</DL>
+<P>
+
+
+
+<HR><H2>List of Functions:</H2>
+
+<DL>
+<DT> 3D Relationships:
+<DL>
+  <DT> <A HREF="../pkgs/R3Shapes/R3Dist.h">R3Distance</A> - returns distance between two primitives.
+  <DT> <A HREF="../pkgs/R3Shapes/R3Isect.h">R3Intersects</A> - returns whether two primitives intersect.
+  <DT> <A HREF="../pkgs/R3Shapes/R3Cont.h">R3Contains</A> - returns whether one primitive contains another.
+  <DT> <A HREF="../pkgs/R3Shapes/R3Cont.h">R3Inside</A> - returns whether one primitive is contained by another.
+  <DT> <A HREF="../pkgs/R3Shapes/R3Parall.h">R3Parallel</A> - returns whether one primitive is parallel to another.
+  <DT> <A HREF="../pkgs/R3Shapes/R3Perp.h">R3Perpendicular</A> - returns whether one primitive is perpendicular to another.
+</DL>
+</DL>
+<P>
+
+
+
+<HR><H2>Example:</H2>
+
+Click <A HREF="../apps/msh2msh/msh2msh.cpp">this</A> to see a sample program.
+<P>
+
+
+

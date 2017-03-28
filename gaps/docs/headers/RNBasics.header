@@ -1,0 +1,55 @@
+<HR><H2>Description:</H2>
+
+The RNBasics package supports simple data types (RNScalar, RNInterval,
+RNArray, RNQueue, RNHeap) and support several OS-dependent functions
+(RNTime, RNMem, RNError).
+
+The RNArray, RNQueue, and RNHeap classes are implemented as templates
+that store collections of a specified data type (like STL classes).
+The storage allocation for these containers is dynamic -- it expands
+and contracts as entries are inserted and removed.  Once a container
+has been constructed, entries and the data stored in them can be
+accessed, rearranged, or modified via member functions or iteration
+macros.  For example, an array of three strings could be constructed
+and manipulated as follows:
+
+<PRE>
+    // Construct the array
+    RNArray&lt;char *&gt; array;   // Creates an empty array
+    array.Insert("String1");       // Insert the 1st string
+    array.Insert("String2");       // Insert the 2nd string
+    array.Insert("String3");       // Insert the 3rd string
+
+    // Access entries
+    char *data;
+    data = array.Head();           // data == "String1"
+    data = array.Tail();           // data == "String3"
+    data = array.Kth(0);           // data == "String1"
+    data = array.Kth(1);           // data == "String2"
+    data = array[1];               // data == "String2"
+
+    // Access all entries
+    for (int i = 0; i < array.NEntries(); i++) {
+      char *data = array[i]
+      printf("%s/n", data);       
+    }
+
+    // Manipulate the array
+    array.Reverse();               // Reverse the order of entries
+    array.RemoveKth(1);            // Remove the 2nd entry (first entry is at index 0)
+    array.InsertKth("String2", 1); // Re-insert string in 2nd entry
+</PRE>
+<P>
+
+Other support functions include:
+
+<UL>
+<LI><A HREF="../pkgs/RNBasics/RNError.h">Error Reporting</A> - Error and warning handling.
+<LI><A HREF="../pkgs/RNBasics/RNMem.h">Memory Manipulation</A> - Memory allocation and manipulation.
+<LI><A HREF="../pkgs/RNBasics/RNScalar.h">Math Support</A> - Mathematical definitions and operations.
+<LI><A HREF="../pkgs/RNBasics/RNFlags.h">Bit Encoded Sets</A> - Bit encoded status flags.
+<LI><A HREF="../pkgs/RNBasics/RNTime.h">Execution Timing</A> - Functions to begin and read a timer.
+</UL>
+
+
+   

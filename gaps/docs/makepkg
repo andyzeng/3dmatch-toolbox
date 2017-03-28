@@ -1,0 +1,42 @@
+#! /bin/bash
+# usage : makepkg name
+
+# Create header
+echo "<HTML>" > $1.html
+echo "<HEAD>" >> $1.html
+echo "<TITLE> $1 Package </TITLE>" >> $1.html
+echo "</HEAD>" >> $1.html
+echo "<BODY>" >> $1.html
+echo "<H1> $1 Package </H1>" >> $1.html
+echo >> $1.html
+echo >> $1.html
+echo >> $1.html
+
+# Create description
+if [ -e headers/$1.header ]; then
+  # Read description, list of classes, and examples from header
+  cat headers/$1.header >> $1.html
+fi
+
+# Create class members
+awk -f makepkg.awk ../pkgs/$1/*.h >> $1.html
+sed -e "s/RNFoobar/$1/g" < $1.html > $1.html.new
+mv $1.html.new $1.html
+echo >> $1.html
+echo >> $1.html
+echo >> $1.html
+
+# Create trailer
+echo "<HR>" >> $1.html
+echo 'Click <A HREF="pkgs.html">this</A> to go back to list of GAPS packages.' >> $1.html
+echo "<P>" >> $1.html
+echo "</BODY>" >> $1.html
+echo "<ADDRESS>funk@cs.princeton.edu</ADDRESS>" >> $1.html
+echo >> $1.html
+echo "</HTML>" >> $1.html
+echo >> $1.html
+echo >> $1.html
+echo >> $1.html
+
+
+

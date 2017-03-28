@@ -1,0 +1,49 @@
+<HR><H2>Description:</H2>
+
+The R3Graphics package supports classes for basic computer graphics:
+3D viewing, camera control, surface material properties, lighting, and scene graphs.
+<P>
+
+
+<HR><H2>List of Classes:</H2>
+
+<DL>
+<DT> Camera and viewport control:
+<DL>
+<DT> <A HREF="#R2Viewport">R2Viewport</A> - 2D screen viewport.
+<DT> <A HREF="#R3Camera">R3Camera</A> - 3D camera (view frustum).
+<DT> <A HREF="#R3Viewer">R3Viewer</A> - Mapping from 3D camera to 2D viewport.
+  <DT> &nbsp;
+</DL>
+
+<DT> Surface material properties:
+<DL>
+  <DT> <A HREF="#R3Brdf">R3Brdf</A> - 3D bidirection reflectance distribution function.
+  <DT> <A HREF="#R2Texture">R2Texture</A> - 2D surface texture.
+  <DT> <A HREF="#R3Material">R3Material</A> - 3D material properties (brdf, texture, and texture transformation).
+  <DT> <A HREF="#R3Model">R3Model</A> - a set of 3D triangles with material properties.
+  <DT> &nbsp;
+</DL>
+
+<DT> Lights:
+<DL>
+  <DT> <A HREF="#R3Light">R3Light</A> - Light abstract class.
+  <DT> <A HREF="#R3DirectionalLight">R3DirectionalLight</A> - Directional light.
+  <DT> <A HREF="#R3PointLight">R3PointLight</A> - Point light.
+  <DT> <A HREF="#R3SpotLight">R3SpotLight</A> - Spot light.
+  <DT> &nbsp;
+</DL>
+
+<DT> Scene graphs:
+<DL>
+  <DT> <A HREF="#R3Scene">R3Scene</A> - scene graph.
+  <DT> <A HREF="#R3SceneNode">R3SceneNode</A> - scene graph node.
+  <DT> &nbsp;
+</DL>
+</DL>
+<P>
+
+
+
+
+

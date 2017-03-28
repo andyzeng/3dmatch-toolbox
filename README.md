@@ -18,11 +18,11 @@ Matching local geometric features on real-world depth images is a challenging ta
 If you find this code useful in your work, please consider citing:
 
 ```shell
-@article{zeng20163dmatch, 
+@inproceedings{zeng20163dmatch, 
 	title={3DMatch: Learning Local Geometric Descriptors from RGB-D Reconstructions}, 
 	author={Zeng, Andy and Song, Shuran and Nie{\ss}ner, Matthias and Fisher, Matthew and Xiao, Jianxiong and Funkhouser, Thomas}, 
-	journal={arXiv preprint arXiv:1603.08182}, 
-	year={2016} 
+	journal={CVPR}, 
+	year={2017} 
 }
 ```
 
@@ -120,22 +120,13 @@ Instructions on how to convert from various 3D data representations into a voxel
  * Instructions on installing GAPS and converting a sample mesh (.off file) into a voxel grid (binary .raw file of floats):
 
 	```shell
-	cd 3dmatch-toolbox
+	cd 3dmatch-toolbox/gaps
 
-	# Download and install GAPS
-	git clone https://github.com/tomfunkhouser/gaps.git gaps
-	cd gaps
-	make
-	cd apps
-
-	# Download and compile msh2df
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/msh2df.zip
-	unzip msh2df.zip
-	cd msh2df
+	# Install GAPS
 	make
 
 	# Run msh2df on example mesh file (see comments in msh2df.cpp for more instructions)
-	cd ../../bin/x86_64
+	cd bin/x86_64
 	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/bicycle000002.off
 	./msh2df bicycle000002.off bicycle000002.raw -v # see comments in msh2df.cpp for more arguments
 

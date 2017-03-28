@@ -1,0 +1,80 @@
+<HR><H2>Description:</H2>
+
+The R2Shapes package supports basics 2D geometry classes.
+It contains classes representing 2D primitives 
+(such as vectors, points, etc.).  It also contains
+classes for 2D transformations (such as 3x3 matrices, etc.) and 
+higher level 2D shapes (such as polygons, boxes, circles, etc).  
+<P>
+For all pairs of 2D primitives (and many 2D shapes), functions are
+provided for computing the relationships between them.  For instance,
+there are functions to compute the distance between primitives
+(R2Distance), check for intersections (R2Intersects), check whether
+one primitive contains another (R2Contains), compute whether
+primitives are perpendicular (R2Perpendicular), and check whether
+primitives are parallel (R2Parallel).
+<P>
+
+<HR><H2>List of Classes:</H2>
+<DL>
+
+<DT> 2D Primitives:
+<DL>
+  <DT> <A HREF="#R2Vector">R2Vector</A> - 2D vector.
+  <DT> <A HREF="#R2Point">R2Point</A> - 2D point.
+  <DT> <A HREF="#R2Line">R2Line</A> - 2D infinite line.
+  <DT> <A HREF="#R2Ray">R2Ray</A> - 2D ray.
+  <DT> <A HREF="#R2Span">R2Span</A> - 2D line segment.
+  <DT> <A HREF="#R2Halfspace">R2Halfspace</A> - 2D halfspace.
+  <DT> &nbsp;
+</DL>
+
+<DT> 2D Shapes:
+<DL>
+  <DT> <A HREF="#R2Shape">R2Shape</A> - abstract 2D shape.
+  <DT> <A HREF="#R2Curve">R2Curve</A> - abstract 2D curve.
+  <DT> <A HREF="#R2Arc">R2Arc</A> - circular arc.
+  <DT> <A HREF="#R2Solid">R2Solid</A> - abstract 2D filled shape.
+  <DT> <A HREF="#R2Box">R2Box</A> - axis-aligned, 2D rectangle.
+  <DT> <A HREF="#R2Circle">R2Circle</A> - 2D circle.
+  <DT> <A HREF="#R2Grid">R2Grid</A> - regularly sampled 2D scalar grid.
+  <DT> &nbsp;
+</DL>
+
+<DT> 2D Transformations:
+<DL>
+  <DT> <A HREF="#R2Transformation">R2Transformation</A> - abstract 2D transformation.
+  <DT> <A HREF="#R2Affine">R2Affine</A> - 2D affine transformation.
+  <DT> <A HREF="#R3Matrix">R3Matrix</A> - 3x3 matrix.
+  <DT> &nbsp;
+</DL>
+</DL>
+<P>
+
+
+
+<HR><H2>List of Functions:</H2>
+
+<DL>
+<DT> 2D Relationships:
+<DL>
+  <DT> <A HREF="../pkgs/R2Shapes/R2Dist.h">R2Distance</A> - returns distance between two primitives.
+  <DT> <A HREF="../pkgs/R2Shapes/R2Isect.h">R2Intersects</A> - returns whether two primitives intersect.
+  <DT> <A HREF="../pkgs/R2Shapes/R2Cont.h">R2Contains</A> - returns whether one primitive contains another.
+  <DT> <A HREF="../pkgs/R2Shapes/R2Cont.h">R2Inside</A> - returns whether one primitive is contained by another.
+  <DT> <A HREF="../pkgs/R2Shapes/R2Parall.h">R2Parallel</A> - returns whether one primitive is parallel to another.
+  <DT> <A HREF="../pkgs/R2Shapes/R2Perp.h">R2Perpendicular</A> - returns whether one primitive is perpendicular to another.
+  <DT> &nbsp;
+</DL>
+</DL>
+<P>
+
+
+
+<HR><H2>Example:</H2>
+
+Click <A HREF="../apps/img2img/img2img.cpp">this</A> to see a sample program.
+<P>
+
+
+

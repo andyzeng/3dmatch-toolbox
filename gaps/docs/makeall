@@ -1,0 +1,7 @@
+#! /bin/bash
+
+for pkg in RNBasics R2Shapes R3Shapes R3Graphics; do
+  echo $pkg
+  ./makepkg $pkg
+done
+
