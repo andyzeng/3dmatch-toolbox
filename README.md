@@ -40,16 +40,16 @@ If you have any questions or find any bugs, please let me know: [Andy Zeng](http
 
 Our reference implementation of 3DMatch, as well as other components in this toolbox, require the following dependencies. Tested on Ubuntu 14.04.
 
-0. [CUDA 7.5](https://developer.nvidia.com/cuda-downloads) and [cuDNN 5](https://developer.nvidia.com/cudnn). You may need to register with NVIDIA. Below are some additional steps to set up cuDNN 5. **NOTE** We highly recommend that you install different versions of cuDNN to different directories (e.g., ```/usr/local/cudnn/vXX```) because different software packages may require different versions.
+0. [CUDA 7.5](https://developer.nvidia.com/cuda-downloads) and [cuDNN 5.1](https://developer.nvidia.com/cudnn). You may need to register with NVIDIA. Below are some additional steps to set up cuDNN 5.1. **NOTE** We highly recommend that you install different versions of cuDNN to different directories (e.g., ```/usr/local/cudnn/vXX```) because different software packages may require different versions.
 
 	```shell
 	LIB_DIR=lib$([[ $(uname) == "Linux" ]] && echo 64)
-	CUDNN_LIB_DIR=/usr/local/cudnn/v5/$LIB_DIR
+	CUDNN_LIB_DIR=/usr/local/cudnn/v5.1/$LIB_DIR
 	echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CUDNN_LIB_DIR >> ~/.profile && ~/.profile
 
 	tar zxvf cudnn*.tgz
 	sudo cp cuda/$LIB_DIR/* $CUDNN_LIB_DIR/
-	sudo cp cuda/include/* /usr/local/cudnn/v5/include/
+	sudo cp cuda/include/* /usr/local/cudnn/v5.1/include/
 	```
 
 0. OpenCV (tested with OpenCV 2.4.11)
