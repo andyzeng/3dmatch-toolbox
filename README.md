@@ -3,7 +3,7 @@
 
 ### 3DMatch: Learning Local Geometric Descriptors from RGB-D Reconstructions
 
-[PDF](https://arxiv.org/pdf/1603.08182v2.pdf) | [Webpage & Benchmarks & Datasets](http://3dmatch.cs.princeton.edu/) | [Video](https://www.youtube.com/watch?v=gZrsJJtDvvA)
+[PDF](https://arxiv.org/pdf/1603.08182.pdf) | [Webpage & Benchmarks & Datasets](http://3dmatch.cs.princeton.edu/) | [Video](https://www.youtube.com/watch?v=gZrsJJtDvvA)
 
 *Andy Zeng, Shuran Song, Matthias Nießner, Matthew Fisher, Jianxiong Xiao, and Thomas Funkhouser*
 
@@ -233,7 +233,7 @@ cd 3dmatch-toolbox/depth-fusion
 
 See folder `3dmatch-toolbox/evaluation`
 
-Evaluation code for the [Keypoint Matching Benchmark](http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark) and [Geometric Registration Benchmark](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark), as well as a reference implementation for the experiments in our [paper](https://arxiv.org/pdf/1603.08182v2.pdf).
+Evaluation code for the [Keypoint Matching Benchmark](http://3dmatch.cs.princeton.edu/#keypoint-matching-benchmark) and [Geometric Registration Benchmark](http://3dmatch.cs.princeton.edu/#geometric-registration-benchmark), as well as a reference implementation for the experiments in our [paper](https://arxiv.org/pdf/1603.08182.pdf).
 
 ### Keypoint Matching Benchmark
 
