@@ -86,7 +86,7 @@ This demo aligns two 3D point clouds (projected from single-view depth maps) usi
 	./download-weights.sh # 3dmatch-weights-snapshot-137000.marvin
 	```
 
-0. Load the two example 3D point clouds, compute their TDF voxel grid volumes, and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk)
+0. Load the two example 3D point clouds, compute their TDF voxel grid volumes, and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk). Warning: this demo only reads 3D point clouds saved in a simple binary format. If you want would like to run 3DMatch on your own point cloud format, please modify demo.cu accordingly.
 
 	```shell
 	# Generate fragment-1.desc.3dmatch.bin and fragment-1.keypts.bin
