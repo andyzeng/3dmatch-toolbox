@@ -357,7 +357,7 @@ public:
             float proj_p2_pix_y = round((cam_K_p2[4] * (p2_cam_y / p2_cam_z) + cam_K_p2[5]) - 0.5f);
 
             // Check if pixel coordinates are within image bounds
-            if (proj_p2_pix_x < 0 || proj_p2_pix_x >= (float)im_width || proj_p2_pix_y < 0 || proj_p2_pix_y >= (float)im_height)
+            if ((int) proj_p2_pix_x < 0 || (int) proj_p2_pix_x >= im_width || (int) proj_p2_pix_y < 0 || (int) proj_p2_pix_y >= im_height)
               continue;
 
             // Check if camera location of current frame is at least 1m away from camera location of frame of p1
