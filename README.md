@@ -37,7 +37,7 @@ All relevant information and downloads can be found [here](http://3dmatch.cs.pri
 If you have any questions or find any bugs, please let me know: [Andy Zeng](http://www.cs.princeton.edu/~andyz/) andyz[at]princeton[dot]edu
 
 ## Change Log
-* **Nov. 02, 2017.** Bug fix: added #include <random> to utils.hpp in demo code.
+* **Nov. 02, 2017.** Bug fix: added `#include <random>` to utils.hpp in demo code.
 * **Oct. 30, 2017.** Bug fix: included Quoc-Huy's fix for NaN errors that occasionally occur during training.
 * **Oct. 28, 2017.** Notice: demo code only reads 3D point clouds saved in a simple binary format. If you would like to run the 3DMatch demo code on your own point cloud format, please modify demo.cu accordingly.
 * **Apr. 06, 2017.** Notice: 3DMatch uses cuDNN 5.1. Revised install instructions.
