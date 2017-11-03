@@ -7,6 +7,7 @@
 // this file (or any portion of it) in your project.
 // ---------------------------------------------------------
 
+#include <random>
 #include <vector>
 #include <opencv2/opencv.hpp>
 
