@@ -36,6 +36,12 @@ All relevant information and downloads can be found [here](http://3dmatch.cs.pri
 #### Contact
 If you have any questions or find any bugs, please let me know: [Andy Zeng](http://www.cs.princeton.edu/~andyz/) andyz[at]princeton[dot]edu
 
+## Change Log
+* **Nov. 02, 2017.** Bug fix: added #include <random> to utils.hpp in demo code.
+* **Oct. 30, 2017.** Bug fix: included Quoc-Huy's fix for NaN errors that occasionally occur during training.
+* **Oct. 28, 2017.** Notice: demo code only reads 3D point clouds saved in a simple binary format. If you would like to run the 3DMatch demo code on your own point cloud format, please modify demo.cu accordingly.
+* **Apr. 06, 2017.** Notice: 3DMatch uses cuDNN 5.1. Revised install instructions.
+
 ## Dependencies
 
 Our reference implementation of 3DMatch, as well as other components in this toolbox, require the following dependencies. Tested on Ubuntu 14.04.
@@ -86,7 +92,7 @@ This demo aligns two 3D point clouds (projected from single-view depth maps) usi
 	./download-weights.sh # 3dmatch-weights-snapshot-137000.marvin
 	```
 
-0. Load the two example 3D point clouds, compute their TDF voxel grid volumes, and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk). Warning: this demo only reads 3D point clouds saved in a simple binary format. If you want would like to run 3DMatch on your own point cloud format, please modify demo.cu accordingly.
+0. Load the two example 3D point clouds, compute their TDF voxel grid volumes, and compute random surface keypoints and their 3DMatch descriptors (saved to binary files on disk). Warning: this demo only reads 3D point clouds saved in a simple binary format. If you would like to run the 3DMatch demo code on your own point cloud format, please modify demo.cu accordingly.
 
 	```shell
 	# Generate fragment-1.desc.3dmatch.bin and fragment-1.keypts.bin
