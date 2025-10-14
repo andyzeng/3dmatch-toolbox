@@ -5,7 +5,7 @@
 
 [PDF](https://arxiv.org/pdf/1603.08182.pdf) | [Webpage & Benchmarks & Datasets](http://3dmatch.cs.princeton.edu/) | [Video](https://www.youtube.com/watch?v=gZrsJJtDvvA)
 
-*[Andy Zeng](http://andyzeng.com/), [Shuran Song](http://vision.princeton.edu/people/shurans/), [Matthias Nießner](http://www.niessnerlab.org/members/matthias_niessner/profile.html), [Matthew Fisher](https://research.adobe.com/person/matt-fisher/), [Jianxiong Xiao](http://vision.princeton.edu/people/xj/), and [Thomas Funkhouser](http://www.cs.princeton.edu/~funk/)*
+*[Andy Zeng](http://andyzeng.com/), [Shuran Song](http://3dvision.princeton.edu/people/shurans/), [Matthias Nießner](http://www.niessnerlab.org/members/matthias_niessner/profile.html), [Matthew Fisher](https://research.adobe.com/person/matt-fisher/), [Jianxiong Xiao](http://3dvision.princeton.edu/people/xj/), and [Thomas Funkhouser](http://www.cs.princeton.edu/~funk/)*
 
 IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2017 **[Oral Presentation](https://www.youtube.com/watch?v=qNVZl7bCjsU&list=PL_bDvITUYucADb15njRd7geem8vxOyo6N&index=3)**
 
@@ -134,11 +134,11 @@ Instructions on how to convert from various 3D data representations into a voxel
 
 	# Run msh2df on example mesh file (see comments in msh2df.cpp for more instructions)
 	cd bin/x86_64
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/bicycle000002.off
+	wget http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/gaps/bicycle000002.off
 	./msh2df bicycle000002.off bicycle000002.raw -v # see comments in msh2df.cpp for more arguments
 
 	# Download visualization script
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/gaps/showTDF.m
+	wget http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/gaps/showTDF.m
 	```
  * Run the visualization script in Matlab
 
@@ -171,15 +171,15 @@ Code for training 3DMatch with [Marvin](http://marvin.is/), a lightweight GPU-on
 	cd ../data
 	mkdir train && mkdir test && mkdir backup
 	cd train
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-brown_cogsci_1-brown_cogsci_1.zip
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/7-scenes-heads.zip
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-harvard_c11-hv_c11_2.zip
+	wget http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-brown_cogsci_1-brown_cogsci_1.zip
+	wget http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/7-scenes-heads.zip
+	wget http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-harvard_c11-hv_c11_2.zip
 	unzip sun3d-brown_cogsci_1-brown_cogsci_1.zip
 	unzip 7-scenes-heads.zip
 	unzip sun3d-harvard_c11-hv_c11_2.zip
 	mv *.zip ../backup
 	cd ../test
-	wget http://vision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-hotel_umd-maryland_hotel3.zip
+	wget http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/rgbd-datasets/sun3d-hotel_umd-maryland_hotel3.zip
 	unzip sun3d-hotel_umd-maryland_hotel3.zip
 	mv *.zip ../backup
 	cd ../../training
@@ -316,16 +316,16 @@ Run the following in Matlab:
 evaluate;
 ```
 
-Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF (see `deprecated/pointCloud2AccTDF.m`). 3DMatch pre-trained weights fine-tuned on training fragments can be downloaded [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/weights/3dmatch-weights-snapshot-127000-fragments-6000.marvin).
+Note: the TDF voxel grids of the scene fragments from the synthetic benchmark were computed using the deprecated code for accurate TDF (see `deprecated/pointCloud2AccTDF.m`). 3DMatch pre-trained weights fine-tuned on training fragments can be downloaded [here](http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/weights/3dmatch-weights-snapshot-127000-fragments-6000.marvin).
 
 ### Model Fitting for 6D Object Pose Estimation in the Amazon Picking Challenge
 
 See folder `3dmatch-toolbox/evaluation/model-fitting-apc`
 
-Includes code and pre-trained models to evaluate 3DMatch for model fitting on the [Shelf & Tote dataset](http://www.cs.princeton.edu/~andyz/apc2016). You can download our pre-computed data (TDF voxel grid volumes for objects and scans, surface keypoints, descriptors, and pose predictions) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/apc-intermediate-data.zip). For an evaluation example, run Matlab script `getError.m`
+Includes code and pre-trained models to evaluate 3DMatch for model fitting on the [Shelf & Tote dataset](http://www.cs.princeton.edu/~andyz/apc2016). You can download our pre-computed data (TDF voxel grid volumes for objects and scans, surface keypoints, descriptors, and pose predictions) [here](http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/apc-intermediate-data.zip). For an evaluation example, run Matlab script `getError.m`
 
 ### Mesh Correspondence in Shape2Pose
 
 See folder `3dmatch-toolbox/evaluation/mesh-correspondence-shape2pose`
 
-Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php) using 3DMatch. You can also download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://vision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `keypointRetrieval.m`.
+Includes code to generate mesh correspondence visualizations on the meshes from the [Shape2Pose dataset](http://gfx.cs.princeton.edu/gfx/pubs/Kim_2014_SHS/index.php) using 3DMatch. You can also download our pre-computed data (TDF voxel grid volumes of the meshes, surface keypoints, 3DMatch descriptors) [here](http://3dvision.princeton.edu/projects/2016/3DMatch/downloads/shape2pose.zip). For a quick visualization, run the Matlab script `keypointRetrieval.m`.
